@@ -149,6 +149,14 @@ When the user wants to *see* it ("preview", "sample", "bana ke do", "make the vi
 
 If no TTS is available, deliver the video with SFX only, plus an `.srt` of the narration lines at the timings used, and offer to re-time it once the user sends their voice-over. The engine draws graphics in code. Real footage comes in as stills with Ken Burns moves, which matches look B's treatment.
 
+### Footage-led edits (real gameplay / archive under graphics)
+
+When the user wants real clips ("real gaming clips", "asli footage"), build two layers instead of drawing backgrounds:
+1. **Footage track.** Download real clips (`references/footage-sourcing.md` lists the gaming sources: official trailers on archive.org, CC-BY longplays). Write an EDL that cuts on VO words and run `scripts/build_footage.py edl.json footage.mp4`. Use `crop` to hide HUD/minimap/watermarks, `rev` for rewind beats, `split` for then-vs-now, and `black` for the ident.
+2. **Graphics layer.** One HTML scene file drawn on a *transparent* canvas: `x.clearRect` each frame, plus a per-scene `dim(a)` (0.2–0.35 on hero footage, 0.55–0.7 under charts). Render it with `preview-engine/render_png.js` (PNG with alpha). Composite with `ffmpeg overlay`.
+3. **Sound.** Run `scripts/music_bed.py` (an original synthesized beat that drops out for the ident), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
+4. Check the tiled composite frames (footage + overlay) before the full render. Check that no logo, ESRB card or end-slate from a trailer shows inside a cut.
+
 ## 7. Building it in tools
 
 Give tool-specific notes only for the tool the user uses.

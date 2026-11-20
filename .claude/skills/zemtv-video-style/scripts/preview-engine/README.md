@@ -32,3 +32,9 @@ Renders a style preview (MP4) from a single HTML/canvas scene file. The pipeline
 8. QC: run `../analyze_reference.sh out.mp4` and view the contact sheet.
 
 With no voice-over yet, time beats at about 2.3 words/s (Urdu/Hindi) or about 2.6 words/s (English). Ship an .srt of the narration lines at those times so the voice can be recorded to match. Once real VO arrives, re-time each scene start to the VO word.
+
+## Footage-led edits (two layers)
+- `../build_footage.py edl.json footage.mp4`: real clips cut to VO beats with exact frame counts, a grade, and crop/reverse/split/black options.
+- Graphics HTML clears the canvas each frame (`x.clearRect`), with a per-scene dim over the footage. Render with `render_png.js` (same arguments as `render.js`, writes `NNNN.png` with alpha).
+- Composite: `ffmpeg -i footage.mp4 -framerate 30 -i ov/%04d.png -i mix.wav -filter_complex "[0:v][1:v]overlay" -c:v libx264 -crf 18 -pix_fmt yuv420p -c:a aac -shortest out.mp4`
+- Music: `../music_bed.py bed.wav <sec> <bpm>`, ducked under the VO with sidechaincompress (see that file's docstring).

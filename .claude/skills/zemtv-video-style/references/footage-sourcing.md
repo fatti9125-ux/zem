@@ -15,7 +15,7 @@
 | **YouTube** | discovery of newsreels and official trailers; Creative Commons filter | default licence = all rights reserved; use only CC-BY uploads or the uploader's original archive | search filters: Creative Commons |
 | **British Pathé / AP Archive / Getty** | best newsreels | licensed (paid) | note as "licence needed" in the asset list |
 | **Pexels / Pixabay / Mixkit / Coverr** | modern stock b-roll (cities, labs, crowds, phones) | free-to-use stock licences | when modern texture is needed |
-| **Game footage** (look A) | gameplay you capture, official trailers | publisher content: commentary / fair-use norms, keep short and transformed | record your own where possible |
+| **Game footage** (look A) | gameplay you capture; **official trailers mirrored on archive.org** (search "Grand Theft Auto VI Trailer", "Launch Trailer", "Red Dead Redemption 2 Official Trailer"; the item id often embeds the YouTube id of the official upload); **CC-BY longplays** on archive.org (e.g. "Grand Theft Auto V PlayStation 5 PAL Gameplay", CC BY 4.0) | trailers are publisher content: commentary / fair-use norms, keep each cut short (1–5 s), transformed, under narration; credit CC-BY longplays | record your own where possible; avoid cutting into ESRB cards, logos and end slates |
 
 ## 2. Query recipes by style
 
