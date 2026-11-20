@@ -157,7 +157,7 @@ When the user wants real clips ("real gaming clips", "asli footage"), build two 
 3. **Sound.** Run `scripts/music_bed.py` (an original synthesized beat that drops out for the ident), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
 4. **Mix both kinds of scene.** Keep most beats as graphics over gameplay, and every 15–30 s switch to a **white Vox-style beat** for explanation-heavy lines (records, comparisons, timelines, money flows, then-vs-now). These beats use an off-white stage or paper, **live game clips inside photo-print cards** (`clipCard`), navy labels, yellow dashed dimension lines, serif highlights and stickers. They're opaque in the overlay, so they cover the footage, and the overlay skips particles/vignette/chapter tag there. Building blocks: `preview-engine/examples/vox_scenes.js`. Card clips: 3 s sequences at 640×360 (`loadSeq`, looped).
 5. **No dead air.** Run `scripts/tighten_vo.py` on the voice-over first: every pause over 0.3 s becomes 0.15 s. If the edit was already timed to the original VO, remap it with the `T()` recipe in that file's docstring.
-6. Check the tiled composite frames (footage + overlay) before the full render. Check that no logo, ESRB card or end-slate from a trailer shows inside a cut.
+6. Check the tiled composite frames (footage + overlay) before the full render. Check that no logo, ESRB card, "Rockstar Games presents" title or end-slate from a trailer shows inside a cut: tile the **first frame of every cut** (`ffmpeg -i seg/NNN.mp4 -frames:v 1`). Trailer openings fade, so start at least 0.5–1 s after a title card.
 
 ## 7. Building it in tools
 
