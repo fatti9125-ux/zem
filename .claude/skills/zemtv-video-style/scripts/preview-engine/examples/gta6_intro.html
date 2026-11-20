@@ -1,0 +1,137 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1280" height="720"></canvas>
+<script src="../lib.js"></script>
+<script>
+const END=72;
+function scene(t,a,b,fn,push=.05,fx=W/2,fy=H/2){if(t<a||t>b)return;x.save();x.globalAlpha=P(t,a,.25)*(1-P(t,b-.25,.25));cam(1+push*P(t,a,b-a),fx,fy);fn(t,x.globalAlpha);x.restore();x.restore();}
+function popAt(t,t0,X,Y,fn,d=.25){const p=P(t,t0,d);if(p<=0)return;x.save();x.translate(X,Y);const s=back(p);x.scale(s,s);x.globalAlpha*=cl(p*3);fn();x.restore();}
+function stepVal(t,list){let v=null,t0=-1;for(const [ti,s] of list)if(t>=ti){v=s;t0=ti;}return [v,t0];}
+function tag(s,X,Y,col,a=1,size=13){x.save();x.globalAlpha*=a;x.font=font({f:IN,w:700,size});x.letterSpacing='2px';const w=x.measureText(s).width+20;x.fillStyle=col+'26';x.strokeStyle=col;x.lineWidth=1.2;rr(X-w/2,Y-13,w,26,4);x.fill();x.stroke();txt(s,X,Y+1,{f:IN,w:700,size,ls:2,c:col});x.restore();}
+function lt2(s,i,t0,t,col=GOLD){lowerThird(s,70,H-70-34*i,P(t,t0,.3),col);}
+
+// S1 date + clock (0-7.4)
+function s1(t){txt('19 NOVEMBER 2026',W/2,165,{size:60,gold:1,ls:4,reveal:P(t,.3,.6)});
+  txt('LAUNCH NIGHT',W/2,222,{f:IN,w:600,size:14,ls:6,c:'#9a9a9a',a:P(t,1,.3)});
+  const [v,t0]=stepVal(t,[[2.0,'11:59:57'],[2.7,'11:59:58'],[3.4,'11:59:59'],[4.1,'12:00:00']]);
+  if(v){const b=(t-t0<.14)?1.05:1,mid=v==='12:00:00';x.save();x.translate(W/2,395);x.scale(b,b);
+    txt(v,0,0,mid?{size:170,gold:1,ls:6,glow:40}:{size:170,c:'#dcdcdc',ls:6,a:P(t,1.9,.25)});x.restore();
+    if(mid){const r=P(t,4.1,.8);x.strokeStyle=`rgba(245,199,102,${.6*(1-r)})`;x.lineWidth=3;x.beginPath();x.ellipse(W/2,395,330+r*160,110+r*60,0,0,7);x.stroke();}}
+  txt('MIDNIGHT',W/2,515,{size:26,w:600,ls:10,c:'#ff4fa3',a:P(t,4.4,.3)});}
+// S2 screens (7.4-12)
+function s2(t){txt('MILLIONS OF SCREENS',W/2,105,{size:52,gold:1,ls:3,reveal:P(t,7.7,.5)});
+  txt('WORLDWIDE · THE SAME MOMENT',W/2,160,{f:IN,w:600,size:14,ls:5,c:'#a0a0a0',a:P(t,8.3,.3)});
+  let id=0;for(let k=0;k<12;k++){const sc=.28+k*.1;const y=235+430*(sc-.28)/1.1*1.15;const sp=96*sc,w=74*sc,h=44*sc;const n=Math.ceil(W/sp)+2;
+    for(let i=-n/2;i<n/2;i++){id++;const X=W/2+i*sp+(k%2)*sp/2;const ti=7.6+rnd(id)*3.4;const l=P(t,ti,.2);
+      x.fillStyle='#120e18';x.fillRect(X-w/2,y-h/2,w,h);if(l>0){x.save();x.shadowColor='rgba(110,216,255,.8)';x.shadowBlur=12*sc;x.fillStyle=`rgba(${lerp(40,150,rnd(id+3))},${lerp(170,230,l)},255,${.25+.6*l})`;x.fillRect(X-w/2+2,y-h/2+2,w-4,h-4);x.restore();}
+      x.strokeStyle='#2a2333';x.lineWidth=1;x.strokeRect(X-w/2,y-h/2,w,h);}}
+  x.fillStyle='rgba(7,5,10,.0)';}
+// S3 calendar (12-15.6)
+function s3(t){const p=eo(P(t,12.1,.4));x.save();x.translate(W/2,370+(1-p)*80);x.globalAlpha*=p;x.rotate(-2*Math.PI/180);
+  x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=30;x.fillStyle='#f4f1ea';rr(-130,-150,260,300,14);x.fill();x.shadowBlur=0;
+  x.fillStyle='#d4202a';x.beginPath();x.roundRect(-130,-150,260,64,[14,14,0,0]);x.fill();txt('NOVEMBER 2026',0,-118,{size:24,w:700,ls:3,c:'#fff'});
+  txt('19',0,10,{size:140,w:700,c:'#1d1d1d'});txt('THURSDAY',0,112,{f:IN,w:700,size:15,ls:5,c:'#8a8a8a'});
+  const cp=eo(P(t,13.0,.5));if(cp>0){x.strokeStyle='#e0283c';x.lineWidth=5;x.beginPath();x.ellipse(0,12,92,74,-.1,-1.8,-1.8+cp*Math.PI*2.1);x.stroke();}x.restore();
+  stamp('DAY OFF',W/2+235,480,13.9,t,RED,-12,40);}
+// S4 download (15.6-20)
+function s4(t){const pr=cl(Math.pow(P(t,16.0,3.0),.85));const done=pr>=1;
+  popAt(t,16.2,W/2-250,170,()=>{x.fillStyle='#f5e7b8';x.beginPath();x.arc(0,0,26,0,7);x.fill();x.fillStyle='#07050a';x.beginPath();x.arc(12,-8,24,0,7);x.fill();});
+  txt('03:47 AM',W/2-205,172,{size:34,w:600,ls:3,al:'left',c:'#cfcfcf',a:P(t,16.3,.3)});
+  const X=W/2-330,Y=300,BW=660;x.fillStyle='rgba(255,255,255,.04)';x.strokeStyle='rgba(255,255,255,.15)';rr(X-30,Y-60,BW+60,210,10);x.fill();x.stroke();
+  txt(done?'DOWNLOAD COMPLETE ✓':'DOWNLOADING…',X,Y,{size:30,w:700,ls:3,al:'left',c:done?'#3ddc84':'#eee'});
+  txt(Math.floor(pr*100)+'%',X+BW,Y,{size:46,w:700,al:'right',...(done?{c:'#3ddc84'}:{gold:1,glow:14})});
+  x.fillStyle='rgba(255,255,255,.1)';rr(X,Y+50,BW,16,8);x.fill();const g=x.createLinearGradient(X,0,X+BW,0);g.addColorStop(0,done?'#2fbf63':'#b8862b');g.addColorStop(1,done?'#3ddc84':'#fff1b8');
+  x.fillStyle=g;x.shadowColor=done?'rgba(61,220,132,.7)':'rgba(245,199,102,.7)';x.shadowBlur=14;if(pr>0){rr(X,Y+50,BW*pr,16,8);x.fill();}x.shadowBlur=0;
+  txt((pr*120).toFixed(1)+' GB / 120 GB (EXAMPLE)',X,Y+100,{f:IN,w:600,size:13,ls:2,al:'left',c:'#8a8a8a'});}
+// S5 13 years timeline (20-25.6)
+function s5(t){const p=eo(P(t,21.0,3.6));const n=1+Math.floor(12*p+.0001);
+  txt(n+(n>1?' YEARS':' YEAR'),W/2,240,{size:110,gold:1,ls:4});txt('OF WAITING',W/2,320,{size:28,w:600,ls:10,c:'#eee',a:P(t,20.3,.3)});
+  const x0=170,x1=1110,Y=470;x.strokeStyle='rgba(245,199,102,.25)';x.lineWidth=2;x.beginPath();x.moveTo(x0,Y);x.lineTo(x1,Y);x.stroke();
+  x.strokeStyle=GOLD;x.shadowColor='rgba(245,199,102,.7)';x.shadowBlur=10;x.beginPath();x.moveTo(x0,Y);x.lineTo(lerp(x0,x1,p),Y);x.stroke();x.shadowBlur=0;
+  const marks={2013:'GTA V RELEASED',2022:'THE LEAK',2023:'TRAILER 1',2026:'LAUNCH'};
+  for(let yr=2013;yr<=2026;yr++){const q=(yr-2013)/13,X=lerp(x0,x1,q),on=p>=q-.001;x.fillStyle=on?GOLD:'#555';x.beginPath();x.arc(X,Y,on?5:3,0,7);x.fill();
+    txt(String(yr),X,Y+30,{f:IN,w:600,size:13,c:on?'#eee':'#666'});
+    if(marks[yr]){const a=on?P(t,21.0+3.6*Math.pow(q,1)*.6,.3):0;x.globalAlpha*=1;x.strokeStyle=`rgba(245,199,102,${.6*a})`;x.beginPath();x.moveTo(X,Y-12);x.lineTo(X,Y-(yr===2023?84:48));x.stroke();
+      tag(marks[yr],X,Y-(yr===2023?100:64),yr===2022?RED:yr===2026?'#3ddc84':GOLD,a,11);}}
+  x.fillStyle='#fff';x.shadowColor='#fff';x.shadowBlur=16;x.beginPath();x.arc(lerp(x0,x1,p),Y,7,0,7);x.fill();x.shadowBlur=0;}
+// S6 VI (25.6-28.4)
+function s6(t){x.save();x.translate(W/2,320);x.rotate(t*.15);for(let i=0;i<12;i++){x.rotate(Math.PI/6);const g=x.createLinearGradient(0,0,0,-600);g.addColorStop(0,'rgba(245,199,102,.18)');g.addColorStop(1,'rgba(245,199,102,0)');x.fillStyle=g;x.beginPath();x.moveTo(0,0);x.lineTo(-40,-600);x.lineTo(40,-600);x.closePath();x.globalAlpha=P(t,25.7,.5);x.fill();}x.restore();
+  const p=eo(P(t,25.7,.6));x.save();x.translate(W/2,320);const s=lerp(1.3,1,p);x.scale(s,s);txt('VI',0,0,{size:280,gold:1,ls:4,glow:60,a:p});x.restore();
+  const q=eo(P(t,26.7,.3));txt('ONE VIDEO GAME',W/2,565+(1-q)*10,{size:32,w:600,ls:10,c:'#fff',a:q});}
+// S7 budget bars (28.4-34.6)
+function bar3d(X,base,w,h,c1,c2){x.fillStyle=c2;x.beginPath();x.moveTo(X,base-h);x.lineTo(X+14,base-h-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.fill();
+  x.beginPath();x.moveTo(X+w,base);x.lineTo(X+w+14,base-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.globalAlpha*=.75;x.fill();x.globalAlpha/=.75;
+  const g=x.createLinearGradient(X,0,X+w,0);g.addColorStop(0,c1);g.addColorStop(.5,c2);g.addColorStop(1,c1);x.fillStyle=g;x.fillRect(X,base-h,w,h);}
+function s7(t){txt('BIGGER THAN HOLLYWOOD?',W/2,95,{size:48,w:700,ls:2,c:'#ececec',reveal:P(t,28.6,.45)});
+  const base=575,u=.17;const bars=[['AVATAR: THE WAY OF WATER','$350M+',350,29.4,'#2c4fb0','#4a7cf0',300],['AVENGERS: ENDGAME','$356M',356,30.1,'#2c4fb0','#4a7cf0',560],['GTA VI','$1B – $2B?',2000,31.0,'#9a6c1c','#f5c766',860]];
+  for(const [lab,val,v,t0,c1,c2,X] of bars){const p=eo(P(t,t0,v>1000?.8:.3));if(p<=0)continue;const h=v*u*p;if(v>1000){x.save();x.shadowColor='rgba(245,199,102,.5)';x.shadowBlur=30;}bar3d(X,base,120,h,c1,c2);if(v>1000)x.restore();
+    txt(val,X+67,base-h-38,{size:v>1000?44:30,w:700,...(v>1000?{gold:1,glow:20}:{c:'#fff'}),a:P(t,t0+(v>1000?.7:.25),.2)});txt(lab,X+60,base+28,{f:IN,w:700,size:12,ls:2,c:'#bbb',a:P(t,t0,.3)});}
+  tag('REPORTED · UNCONFIRMED',927,150,RED,P(t,32.3,.25));
+  txt('Film budgets as reported · GTA VI budget never officially disclosed',W/2,650,{f:IN,w:500,size:14,c:'#8a8a8a',a:P(t,32.8,.3)});}
+// S8 hack + leak (34.6-41)
+function s8(t){txt('SEPTEMBER 2022',W/2,90,{size:40,w:700,ls:4,c:'#fff',reveal:P(t,34.8,.4)});
+  const na=1-P(t,36.3,.3);if(na>0){x.save();x.globalAlpha*=na;const hub=[W/2,380];for(let i=0;i<16;i++){const nx=160+rnd(i)*960,ny=170+rnd(i+20)*360,p=eo(P(t,34.9+i*.07,.35));x.strokeStyle='rgba(224,40,60,.7)';x.lineWidth=1.2;x.beginPath();x.moveTo(...hub);x.lineTo(lerp(hub[0],nx,p),lerp(hub[1],ny,p));x.stroke();if(p>=1){x.fillStyle='#ff4060';x.shadowColor='#ff4060';x.shadowBlur=10;x.beginPath();x.arc(nx,ny,4,0,7);x.fill();x.shadowBlur=0;}}
+    popAt(t,35.3,W/2,560,()=>txt('HACKED',0,0,{size:64,w:700,ls:6,c:RED}),.2);x.restore();}
+  if(t>36.3){txt('DEVELOPMENT VIDEOS LEAKED',W/2,140,{f:IN,w:700,size:14,ls:4,c:'#ccc',a:P(t,36.6,.3)});
+    const cw=230,ch=118,gx=W/2-2*cw-30,gy=168;for(let i=0;i<12;i++){const cx=gx+(i%4)*(cw+20),cy=gy+Math.floor(i/4)*(ch+18);const q=P(t,36.4+i*.1,.15);if(q<=0)continue;x.save();x.globalAlpha*=q;
+      const g=x.createLinearGradient(cx,cy,cx+cw,cy+ch);g.addColorStop(0,`hsl(${200+rnd(i)*80},18%,${18+rnd(i+1)*12}%)`);g.addColorStop(1,`hsl(${20+rnd(i+2)*40},15%,${10+rnd(i+3)*8}%)`);x.fillStyle=g;x.fillRect(cx,cy,cw,ch);
+      for(let k=0;k<5;k++){x.fillStyle=`rgba(255,255,255,${.04+.05*rnd(i*9+k)})`;x.beginPath();x.ellipse(cx+rnd(i*7+k)*cw,cy+rnd(i*5+k)*ch,20+rnd(k+i)*40,10+rnd(k*3+i)*25,0,0,7);x.fill();}
+      x.strokeStyle='rgba(255,255,255,.12)';x.strokeRect(cx,cy,cw,ch);txt('REDACTED',cx+cw/2,cy+ch/2,{size:20,w:700,ls:4,c:'#ff3048'});x.restore();}
+    const sy=((t-36.4)*260)%600+170;x.fillStyle='rgba(224,40,60,.35)';x.fillRect(gx-10,sy,4*cw+80,3);
+    stamp('LEAKED',W/2,330,39.6,t,RED,-10,60);}
+  lt2('4 YEARS BEFORE RELEASE',1,37.2,t,RED);lt2('A TEENAGE HACKER',0,38.4,t,RED);}
+// S9 views (41-45.2)
+function s9(t){for(let i=0;i<48;i++){const cx=(i%8)*165-10,cy=Math.floor(i/8)*125-10;x.fillStyle=`hsla(${280+rnd(i)*80},35%,${12+rnd(i+5)*10}%,.8)`;x.fillRect(cx,cy,155,115);}
+  x.fillStyle='rgba(7,5,10,.72)';x.fillRect(-50,-50,W+100,H+100);
+  txt('THE TRAILER',W/2,110,{size:40,w:700,ls:4,c:'#eee',reveal:P(t,41.1,.4)});
+  const [v,t0]=stepVal(t,[[41.3,'30M'],[41.85,'50M'],[42.4,'65M'],[42.95,'78M'],[43.5,'90M+']]);if(v){const b=(t-t0<.13)?1.06:1;x.save();x.translate(W/2,350);x.scale(b,b);txt(v,0,0,{size:150,gold:1,ls:3,glow:40});x.restore();}
+  txt('VIEWS IN 24 HOURS · YOUTUBE',W/2,460,{size:26,w:600,ls:5,c:'#fff',a:P(t,43.7,.3)});
+  txt('TRAILER 1 · DECEMBER 2023 · AS REPORTED',W/2,500,{f:IN,w:600,size:13,ls:3,c:'#8a8a8a',a:P(t,44,.3)});stamp('RECORD',W/2+300,250,44.4,t,RED,-9,40);}
+// S10 balance (45.2-51.6)
+function s10(t){txt('BEFORE LAUNCH DAY',W/2,90,{size:40,w:700,ls:4,c:'#eee',reveal:P(t,45.4,.4)});
+  const fill=P(t,47.0,3.0),ang=lerp(14,-1,eo(fill))*Math.PI/180;const px=W/2,py=270,L=290;
+  x.fillStyle='rgba(245,199,102,.12)';x.strokeStyle=GOLD;x.lineWidth=2;x.beginPath();x.moveTo(px,py);x.lineTo(px-45,py+260);x.lineTo(px+45,py+260);x.closePath();x.fill();x.stroke();
+  const lx=px-Math.cos(ang)*L,ly=py+Math.sin(ang)*L,rx=px+Math.cos(ang)*L,ry=py-Math.sin(ang)*L;x.lineWidth=4;x.beginPath();x.moveTo(lx,ly);x.lineTo(rx,ry);x.stroke();x.fillStyle=GOLD;x.beginPath();x.arc(px,py,7,0,7);x.fill();
+  function pan(X,Y){x.lineWidth=1.5;x.beginPath();x.moveTo(X,Y);x.lineTo(X-60,Y+110);x.moveTo(X,Y);x.lineTo(X+60,Y+110);x.stroke();x.beginPath();x.moveTo(X-75,Y+110);x.quadraticCurveTo(X,Y+150,X+75,Y+110);x.closePath();x.fillStyle='rgba(245,199,102,.15)';x.fill();x.stroke();}
+  pan(lx,ly);pan(rx,ry);
+  // budget block
+  x.save();x.globalAlpha*=P(t,45.6,.3);bar3d(lx-45,ly+112,80,70,'#9a6c1c','#f5c766');x.restore();
+  for(let i=0;i<24;i++){const ti=47.0+i*.12,q=P(t,ti,.2);if(q<=0)continue;const cx=rx-50+(i%6)*20,cy=ry+104-Math.floor(i/6)*11;const dy=(1-eo(q))*-160;x.fillStyle='#f5c766';x.strokeStyle='#9a6c1c';x.lineWidth=1;x.beginPath();x.ellipse(cx,cy+dy,10,5,0,0,7);x.fill();x.stroke();}
+  tag('DEVELOPMENT BUDGET',lx,ly+190,GOLD,P(t,45.7,.3));tag('PRE-LAUNCH SALES',rx,ry+190,'#3ddc84',P(t,46.6,.3));
+  const q=eo(P(t,50.2,.3));txt('PAID FOR ITSELF?',W/2,620+(1-q)*10,{size:50,w:700,ls:3,c:'#fff',a:q});tag('SPECULATION · NO OFFICIAL FIGURES',W/2,670,RED,P(t,50.6,.25));}
+// S11 split questions (51.6-58.4)
+function s11(t){const dp=eo(P(t,51.8,.4));x.strokeStyle=GOLD;x.lineWidth=2;x.shadowColor='rgba(245,199,102,.7)';x.shadowBlur=10;x.beginPath();x.moveTo(W/2,80);x.lineTo(W/2,80+560*dp);x.stroke();x.shadowBlur=0;
+  const dim=1-.45*P(t,55.4,.4);x.save();x.globalAlpha*=dim;popAt(t,52.0,W/4,280,()=>txt('$',0,0,{size:200,gold:1,glow:40}));
+  txt('WHERE DID THE',W/4,450,{size:34,w:600,ls:4,c:'#eee',a:P(t,52.6,.3)});txt('BILLIONS GO?',W/4,505,{size:56,gold:1,ls:3,reveal:P(t,52.9,.4)});x.restore();
+  popAt(t,55.4,3*W/4,280,()=>txt('13',0,0,{size:200,gold:1,glow:40}));
+  txt('WHY DID IT TAKE',3*W/4,450,{size:34,w:600,ls:4,c:'#eee',a:P(t,55.8,.3)});txt('13 YEARS?',3*W/4,505,{size:56,gold:1,ls:3,reveal:P(t,56.1,.4)});}
+// S12 chapters (58.4-63.2)
+function s12(t){txt("THE STORY MOST PEOPLE DON'T KNOW",W/2,150,{size:46,gold:1,ls:3,reveal:P(t,58.6,.5)});
+  [['01','THE BUDGET'],['02','THE LEAK'],['03','THE TRAILER'],['04','THE BUSINESS']].forEach(([n,l],i)=>popAt(t,59.6+i*.6,W/2+(i-1.5)*250,370,()=>{x.fillStyle='rgba(245,199,102,.07)';x.strokeStyle=i===1?RED:GOLD;x.lineWidth=1.5;rr(-105,-85,210,170,10);x.fill();x.stroke();
+    txt(n,0,-25,{size:60,gold:1,glow:16});txt(l,0,45,{size:22,w:600,ls:3,c:'#fff'});}));
+  txt('IN THIS VIDEO',W/2,520,{f:IN,w:600,size:14,ls:6,c:'#9a9a9a',a:P(t,62,.3)});}
+// S13 PK & IN (63.2-69)
+function flagPK(){x.fillStyle='#fff';x.fillRect(-120,-80,60,160);x.fillStyle='#01411c';x.fillRect(-60,-80,180,160);x.fillStyle='#fff';x.beginPath();x.arc(30,0,48,0,7);x.fill();x.fillStyle='#01411c';x.beginPath();x.arc(46,-14,42,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();for(let i=0;i<10;i++){const r=i%2?7:17,a=-Math.PI/2+i*Math.PI/5+.6;x.lineTo(62+Math.cos(a)*r,-22+Math.sin(a)*r);}x.closePath();x.fill();}
+function flagIN(){['#FF9933','#ffffff','#138808'].forEach((c,i)=>{x.fillStyle=c;x.fillRect(-120,-80+i*53.4,240,54);});x.strokeStyle='#000080';x.lineWidth=2.5;x.beginPath();x.arc(0,0,22,0,7);x.stroke();for(let i=0;i<24;i++){const a=i*Math.PI/12;x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(a)*22,Math.sin(a)*22);x.lineWidth=1;x.stroke();}}
+function s13(t){txt('ONE LAST THING — ONLY FOR GAMERS IN',W/2,120,{size:32,w:600,ls:4,c:'#eee',reveal:P(t,63.4,.5)});
+  for(const [fn,X,t0,l] of [[flagPK,W/2-200,64.0,'PAKISTAN'],[flagIN,W/2+200,64.5,'INDIA']]){popAt(t,t0,X,320,()=>{x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=24;x.fillStyle='#000';x.fillRect(-120,-80,240,160);x.shadowBlur=0;fn();x.strokeStyle='rgba(255,255,255,.3)';x.lineWidth=1;x.strokeRect(-120,-80,240,160);});
+    txt(l,X,440,{size:28,w:700,ls:6,c:'#fff',a:P(t,t0+.2,.3)});}
+  txt('YOU MIGHT NOT LIKE IT',W/2,530,{size:30,w:700,ls:6,c:RED,a:P(t,65.6,.3)});stamp('WATCH TILL THE END',W/2,610,66.9,t,GOLD,-4,34);}
+function ident(t){if(t<68.8)return;x.save();x.globalAlpha=P(t,68.8,.3)*(1-P(t,71.5,.5));x.fillStyle='#050d08';x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,H/2,0,W/2,H/2,H*.7);g.addColorStop(0,'rgba(40,150,80,.35)');g.addColorStop(1,'rgba(40,150,80,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  particles(t,40,'#5fe08f',.6);zLogo(W/2,H/2-30,160,P(t,69.1,.27));const q=eo(P(t,69.7,.3));txt('WELCOME TO ZEMTV',W/2,H/2+100+(1-q)*10,{size:26,w:600,ls:8,c:'#e8ffe9',a:q});vignette(.7);x.restore();}
+
+function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.fillStyle='#000';x.fillRect(0,0,W,H);
+  bgA(t);x.save();x.globalAlpha=P(t,0,.4);
+  scene(t,0,7.4,s1,.06);scene(t,7.3,12.1,s2,.04);scene(t,12.0,15.7,s3,.05);scene(t,15.6,20.1,s4,.04);scene(t,20.0,25.7,s5,.04);scene(t,25.6,28.5,s6,.06);
+  scene(t,28.4,34.7,s7,.05);scene(t,34.6,41.1,s8,.04);scene(t,41.0,45.3,s9,.06);scene(t,45.2,51.7,s10,.04);scene(t,51.6,58.5,s11,.04);scene(t,58.4,63.3,s12,.04);scene(t,63.2,69.0,s13,.04);
+  // lower thirds that live outside the zoom
+  if(t>12.2&&t<15.6)lowerThird('TOOK THE DAY OFF',70,H-70,P(t,12.4,.3)*(1-P(t,15.3,.3)));
+  if(t>15.8&&t<20)lowerThird('STAYED UP ALL NIGHT',70,H-70,P(t,16.0,.3)*(1-P(t,19.7,.3)));
+  x.restore();vignette(.55);progress(P(t,0,68.8));
+  if(t>4.1&&t<4.6){x.fillStyle=`rgba(255,240,200,${.35*(1-P(t,4.1,.45))})`;x.fillRect(0,0,W,H);}
+  ident(t);if(t<.4){x.fillStyle=`rgba(0,0,0,${1-P(t,0,.4)})`;x.fillRect(0,0,W,H);}}
+async function ready(){const f=[new FontFace('Oswald','url(../fonts/oswald-latin-700-normal.woff2)',{weight:'700'}),new FontFace('Oswald','url(../fonts/oswald-latin-600-normal.woff2)',{weight:'600'})];
+  for(const ff of f){await ff.load();document.fonts.add(ff);}await document.fonts.load('600 20px Inter');await document.fonts.load('700 20px Inter');render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>

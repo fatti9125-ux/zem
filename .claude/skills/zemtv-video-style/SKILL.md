@@ -1,6 +1,6 @@
 ---
 name: zemtv-video-style
-description: House animation and editing style for ZemTV-type YouTube documentaries and explainers. Turn a script, topic or voice-over into a shot-by-shot edit plan with on-screen text, motion graphics, timings in frames, colours and transitions, in one of three looks — dark-gold data explainer (budgets, sales, business), white-evidence documentary (history, mysteries, science, maps, documents), or paper/cut-out collage (short social pieces). Use this skill whenever the user wants to plan, storyboard, animate, edit, script visuals for, or critique a faceless/explainer/documentary video, asks for "the same style as my channel / ZemTV / the GTA video / the Noah's Ark video", wants motion-graphics specs for After Effects, Premiere, CapCut, Remotion, Blender or ffmpeg, or wants to analyze reference clips frame by frame — even if they don't say "style guide".
+description: House animation and editing style for ZemTV-type YouTube documentaries and explainers. Turn a script, topic or voice-over (English or Roman Urdu/Hindi) into a shot-by-shot edit plan AND a rendered preview MP4, with on-screen text, motion graphics, real-footage treatment, frame timings, colours, transitions and SFX, in one of three looks — dark-gold data explainer (budgets, sales, business, games), white-evidence documentary (history, mysteries, science, maps, documents, field footage), or collage (editorial paper, surreal B&W, retro mid-century). Use this skill whenever the user wants to plan, storyboard, animate, edit, preview, "video bana ke do", script visuals for, or critique a faceless/explainer/documentary video, asks for "the same style as my channel / ZemTV / the GTA video / the Noah's Ark video", wants motion-graphics specs for After Effects, Premiere, CapCut, Remotion, Blender or ffmpeg, or wants to analyze reference clips frame by frame — even if they don't say "style guide".
 ---
 
 # ZemTV video style
@@ -30,8 +30,19 @@ A long video can mix looks. Look B regularly switches to full-bleed photoreal fo
 - `references/look-b-white-evidence.md`
 - `references/look-c-collage.md`
 - `references/motion-library.md`: every animation move with frame timings. Read it whenever you specify motion.
+- `references/footage-treatment.md`: how real clips are graded, moved, cut and placed inside graphics. Read it for any video that uses real footage (almost all of them).
 
 If the user hasn't said which look, infer it from the topic and say which you chose in one line.
+
+**Sub-styles of look C.** Pick one per piece:
+- C1 editorial paper: off-white page, red numbers, yellow highlighter on italic serif words, torn bars.
+- C2 surreal B&W collage: grid paper, circle cut-outs, red/yellow accents, radial bursts.
+- C3 retro mid-century: flat khaki/lime/brick fields, halftone photos, pop-ups with overshoot.
+- Presenter + hero number: B&W person, green digits layered behind the head.
+
+**Not covered yet:** a cartoon-character / flat-illustration look (portraits that turn into characters, courtrooms, maps with armies). The user described these clips but they never arrived. If asked for that look, say so and ask for the clips.
+
+**Narration language.** ZemTV narrates in Urdu/Hindi (Roman script) but keeps **on-screen text in English caps**. Localise money where it helps (`$2,000,000,000 → 2 ARAB US DOLLARS → PKR 56,000 CRORE`). Pace Urdu/Hindi VO at about 2.3 words/s when timing without a recording.
 
 ## 2. Structure the video
 
@@ -73,7 +84,8 @@ Practical consequences:
    - cyan/blue = tech or online
 2. **Big claim + tiny caveat.** Every number or claim gets a small grey or red qualifier line (`UNCONFIRMED · ESTIMATE ONLY`, `NOT GTA VI'S REAL BUDGET`).
 3. **Labels attach to things.** Use leader lines, lower-third bars (`|LABEL`), tags or dimension lines. Floating text only for headlines.
-4. **Background footage is texture** behind graphics: darken it 40–60%, blur, or desaturate, and vignette it.
+4. **Background footage is texture** behind graphics: darken it 40–60%, blur, or desaturate, and vignette it. Every still gets a Ken Burns move (1.00 → 1.06–1.08). Exact grades are in `references/footage-treatment.md`.
+8. **Chapter tag (look A):** a gold "PART n" pill + a white caps title at the top-left for the whole chapter, under a 2–3 px progress line on the top edge.
 5. **One typeface family.** Use a heavy condensed sans in all caps (Oswald / Bebas Neue / Anton / League Gothic). Add a serif italic only for collage highlights.
 6. **Entrances ease out (4–8 frames); impact items overshoot.** Impact items are stamps, pops and the hero number. Exits are faster than entrances, or simply dissolve.
 7. **Ask a question before showing the answer.** Every chapter title is a question.
@@ -100,7 +112,19 @@ When asked to *critique* an edit, compare it against sections 3–4 and the moti
 
 When asked to *analyze reference clips*, run `scripts/analyze_reference.sh <video>...`. It writes contact sheets (1 frame per second), 30-fps frame strips on request, a cut list and a still/motion ratio. Then view the sheets and describe palette, type, layout, moves (with frame counts) and pacing, in the same vocabulary as this skill.
 
-## 6. Building it in tools
+## 6. Rendering a preview video
+
+When the user wants to *see* it ("preview", "sample", "bana ke do", "make the video"), render an MP4 with the bundled engine in `scripts/preview-engine/`. Don't stop at a shot list. Read its `README.md` and follow it:
+1. Write the shot list.
+2. Write one HTML scene file using `lib.js`. Start from the closest example: `examples/gta6_intro.html` for a narration-timed look-A hook, and `examples/style_reel.html` for footage plus every look.
+3. Extract footage stills from any clips the user gave you.
+4. Render 10–20 key frames, tile them, look at them, and fix overlaps and crops.
+5. Render all frames, synthesize SFX with `sfx.py`, and encode.
+6. QC with a 1 fps contact sheet.
+
+If no TTS is available, deliver the video with SFX only, plus an `.srt` of the narration lines at the timings used, and offer to re-time it once the user sends their voice-over. The engine draws graphics in code. Real footage comes in as stills with Ken Burns moves, which matches look B's treatment.
+
+## 7. Building it in tools
 
 Give tool-specific notes only for the tool the user uses.
 - **After Effects / Premiere:** easing values are in `references/motion-library.md`.
@@ -109,7 +133,7 @@ Give tool-specific notes only for the tool the user uses.
 - **Blender** for look-A 3D: gold metallic material, an emission strip light, a low-poly scene, and a camera dolly of 5–10% over the shot.
 - **ffmpeg** only for assembly or rough cuts, not for motion design.
 
-## 7. Before handing over, check
+## 8. Before handing over, check
 
 - [ ] Every VO sentence that contains a fact has a visual change on screen.
 - [ ] No still frame lasts more than 1.5 s.

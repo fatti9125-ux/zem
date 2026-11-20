@@ -22,6 +22,7 @@ Source: the GTA VI "$2 billion budget" video (35 clips, 640×360 @30fps, narrati
 
 ## Persistent frame elements
 - **Chapter progress line**: a 2 px line on the very top edge, gold or pink. It grows left to right across a chapter and resets at the next one. It's on almost every frame from minute 5 onward.
+- **Chapter tag**: top-left, a small gold-outlined pill "PART 1", then the chapter title in white condensed caps ("PART 1 · BUILDING A LIVING WORLD", "PART … · THE VERDICT"). It stays on screen for the whole chapter.
 - Vignette 30–40%, light film grain, occasional floating gold dust particles.
 
 ## Recurring graphic set-pieces (with source clip)
