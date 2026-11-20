@@ -28,17 +28,42 @@ The core idea behind every look: **the viewer should always know what the narrat
 A long video can mix looks. Look B regularly switches to full-bleed photoreal footage, and look A uses gameplay as its bed. **Keep one look per video as the "home" graphic language** so it feels branded. Read the matching reference file before planning:
 - `references/look-a-dark-gold-data.md`
 - `references/look-b-white-evidence.md`
-- `references/look-c-collage.md`
+- `references/look-c-collage.md` (overview) and `references/look-c-archive-styles.md` (full C1–C4 spec with archive footage)
 - `references/motion-library.md`: every animation move with frame timings. Read it whenever you specify motion.
 - `references/footage-treatment.md`: how real clips are graded, moved, cut and placed inside graphics. Read it for any video that uses real footage (almost all of them).
+- `references/footage-sourcing.md`: where and how to search for footage (Reddit, Commons, Internet Archive, Openverse, NASA/LOC, stock, YouTube CC) and the licence rules.
 
 If the user hasn't said which look, infer it from the topic and say which you chose in one line.
 
-**Sub-styles of look C.** Pick one per piece:
-- C1 editorial paper: off-white page, red numbers, yellow highlighter on italic serif words, torn bars.
-- C2 surreal B&W collage: grid paper, circle cut-outs, red/yellow accents, radial bursts.
-- C3 retro mid-century: flat khaki/lime/brick fields, halftone photos, pop-ups with overshoot.
-- Presenter + hero number: B&W person, green digits layered behind the head.
+**Sub-styles of look C.** Pick one per piece. Each is built on real archive photos and film, and the full frame-measured spec is in `references/look-c-archive-styles.md`:
+- C1 editorial paper: off-white page, torn B&W archive photos, red numbers, yellow highlighter on italic serif words, torn bars, a live corner counter.
+- C2 surreal B&W collage: grid paper, public-domain film (moving), circle cut-outs, red/yellow accents, radial bursts, echo trails, slice glitches.
+- C3 retro mid-century: flat khaki/lime/brick fields, halftone archive portraits, pop-ups with overshoot, callout tags.
+- C4 presenter + hero number: archive speech footage, then a B&W presenter cut-out with green digits layered behind the head.
+
+## Footage first: search the internet for it
+
+Before drawing anything, **search online platforms for real footage and photos for every beat**:
+- Wikimedia Commons
+- Internet Archive
+- Openverse
+- **Reddit** (r/HistoryPorn, r/OldSchoolCool, r/ArchivalFootage, r/TheWayWeWere, r/ColorizedHistory, r/PublicDomain, and the topic's own subs)
+- NASA, Library of Congress / NARA
+- free stock sites (Pexels, Pixabay, Mixkit)
+- YouTube's Creative Commons filter
+
+Use `scripts/find_footage.py`. Follow `references/footage-sourcing.md` for:
+- query recipes per style
+- cutting clips out of archive.org films without downloading them whole
+- presenter cut-outs (`scripts/cutout.py`)
+- licence rules
+
+The essentials:
+- A Reddit post is never a licence: trace it to the original archive.
+- Use only PD / CC0 / CC-BY / free-stock material without flagging it. List anything else as "licence needed".
+- Record every asset in `CREDITS.txt` and end with a sources card.
+
+If a platform is blocked or needs a key (Reddit's API needs a token for `oauth.reddit.com`), say which one and carry on with the rest.
 
 **Not covered yet:** a cartoon-character / flat-illustration look (portraits that turn into characters, courtrooms, maps with armies). The user described these clips but they never arrived. If asked for that look, say so and ask for the clips.
 

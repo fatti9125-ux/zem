@@ -1,0 +1,130 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1280" height="720"></canvas>
+<script src="../lib.js"></script>
+<script>
+const END=66,SERIF='"DejaVu Serif"',BW='grayscale(1) contrast(1.35) brightness(1.05)';
+function look(s,t,t0,t1,dark=false){if(t<t0||t>t1)return;const a=P(t,t0+.3,.3)*(1-P(t,t1-.4,.3));x.save();x.globalAlpha=a;x.font=font({f:IN,w:700,size:11});x.letterSpacing='3px';const w=x.measureText(s).width+24;
+  x.fillStyle='rgba(0,0,0,.6)';rr(W-w-24,H-46,w,26,13);x.fill();txt(s,W-w/2-24,H-32,{f:IN,w:700,size:11,ls:3,c:'#fff'});x.restore();}
+function paperBg(col='#efebe3'){x.fillStyle=col;x.fillRect(-50,-50,W+100,H+100);for(let i=0;i<2200;i++){x.fillStyle=`rgba(80,60,30,${.045*rnd(i)})`;x.fillRect(rnd(i+1)*W,rnd(i+2)*H,2,1);}
+  const g=x.createRadialGradient(W/2,H/2,H*.4,W/2,H/2,H*1.0);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(60,45,20,.28)');x.fillStyle=g;x.fillRect(0,0,W,H);}
+function serifHL(pre,word,post,X,Y,size,p,col='#1d1d1d'){x.font=`italic 400 ${size}px ${SERIF}`;const a=x.measureText(pre).width,c2=x.measureText(post).width;x.font=`italic 700 ${size}px ${SERIF}`;const b=x.measureText(word).width;x.font=`italic 400 ${size}px ${SERIF}`;const L=X-(a+b+c2)/2;
+  x.fillStyle='#ffe14d';x.fillRect(L+a-4,Y-size*.45,(b+8)*eo(p),size*.95);x.fillStyle=col;x.textAlign='left';x.textBaseline='middle';x.fillText(pre,L,Y);x.font=`italic 700 ${size}px ${SERIF}`;x.fillText(word,L+a,Y);x.font=`italic 400 ${size}px ${SERIF}`;x.fillText(post,L+a+b,Y);}
+function tornPhoto(im,X,Y,w,h,rot,p,seed,s=1,filter=BW,ax=.5,ay=.5){if(p<=0)return;x.save();x.translate(X,Y+(1-eo(p))*260);x.rotate(rot*Math.PI/180);x.globalAlpha*=cl(p*2);
+  tornRect(-w/2,-h/2,w,h,seed,9);x.save();x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=18;x.shadowOffsetY=8;x.fillStyle='#f6f2e8';x.fill();x.restore();x.clip();cover(im,-w/2,-h/2,w,h,s,ax,ay,filter);x.restore();}
+function sticker(s,X,Y,t0,t,rot=-8,col='#d7261e',size=22){const p=P(t,t0,.08);if(p<=0)return;x.save();x.translate(X,Y);x.rotate(rot*Math.PI/180);const sc=lerp(1.25,1,eo(p));x.scale(sc,sc);x.font=font({size,w:700});x.letterSpacing='2px';const w=x.measureText(s).width+26;
+  x.fillStyle=col;tornRect(-w/2,-size*.75,w,size*1.5,size,4);x.fill();txt(s,0,1,{size,w:700,ls:2,c:'#fff'});x.restore();}
+function corner(t,label,val,dark=false){x.save();x.fillStyle=dark?'#efebe3':'#fff';tornRect(W-262,22,236,58,7,4);x.shadowColor='rgba(0,0,0,.2)';x.shadowBlur=6;x.fill();x.restore();
+  txt(label,W-144,38,{f:IN,w:700,size:9,ls:2,c:'#666'});txt(val,W-144,62,{size:24,w:700,c:'#1d1d1d'});}
+
+// ================= C1 EDITORIAL PAPER — 1929 (0-16) =================
+function c1(t){paperBg();const rate=162037;
+  if(t<13.8){
+    if(t<7.0){x.save();x.globalAlpha*=1-P(t,6.7,.3);
+      txt('OCTOBER 29, 1929,',W/2,78,{f:IN,w:700,size:14,ls:6,c:'#444',a:P(t,.3,.3)});x.save();x.globalAlpha*=P(t,.7,.3);serifHL('Wall Street was about to ','collapse','.',W/2,128,42,P(t,1.5,.4));x.restore();
+      tornPhoto(IMG.c1_nyse,370,430,560,380,-2,P(t,1.7,.4),11,lerp(1.05,1.14,P(t,1.7,5.5)),BW,.5,.4);
+      txt('Crowd outside the New York Stock Exchange, 1929',370,640,{f:IN,w:500,size:11,c:'#777',a:P(t,2.3,.3)});
+      popAt(t,3.6,930,390,()=>txt('$14,000,000,000',0,0,{size:68,w:700,c:'#d7261e'}),.2);
+      x.save();x.globalAlpha*=P(t,4.2,.3);x.font=`italic 400 28px ${SERIF}`;x.fillStyle='#1d1d1d';x.textAlign='center';x.fillText('wiped out in a single day',930,450);x.restore();
+      txt('Contemporary estimates of market losses',930,488,{f:IN,w:500,size:12,c:'#777',a:P(t,4.6,.3)});sticker('BLACK TUESDAY',1040,320,5.1,t,-9);x.restore();}
+    else if(t<11.3){x.save();x.globalAlpha*=P(t,7.0,.3)*(1-P(t,11.0,.3));
+      tornPhoto(IMG.c1_mother,930,360,380,480,2,P(t,7.2,.4),23,lerp(1.02,1.1,P(t,7.2,4)),BW,.5,.3);txt('Dorothea Lange, 1936 · Library of Congress',930,625,{f:IN,w:500,size:11,c:'#777',a:P(t,7.6,.3)});
+      for(let i=0;i<20;i++){const X=170+(i%5)*80,Y=210+Math.floor(i/5)*92,red=i%4===2&&t>8.4+i*.04;x.fillStyle=red?'#d7261e':'#9a9488';x.globalAlpha*=1;
+        const q=P(t,7.4+i*.03,.2);if(q<=0)continue;x.save();x.globalAlpha*=q;x.beginPath();x.arc(X,Y-18,12,0,7);x.fill();rr(X-16,Y-2,32,34,10);x.fill();x.restore();}
+      x.save();x.globalAlpha*=P(t,8.8,.3);serifHL('','1 in 4',' Americans out of work',330,590,30,P(t,9.1,.35));x.restore();
+      txt('U.S. unemployment peaked near 25% in 1933',330,630,{f:IN,w:500,size:12,c:'#777',a:P(t,9.5,.3)});x.restore();}
+    else{x.save();x.globalAlpha*=P(t,11.3,.25);txt('UNEMPLOYMENT RATE, UNITED STATES',W/2,150,{f:IN,w:700,size:14,ls:5,c:'#444'});
+      [['1929','3%',.12,'#1d1d1d',11.5],['1933','25%',.98,'#d7261e',12.0]].forEach(([y,v,f,col,t0],i)=>{const Y=290+i*130,w=780*f*eo(P(t,t0,.5));x.fillStyle=col;if(w>2){tornRect(260,Y-38,w,76,i*17+3,7);x.fill();}
+        txt(y,235,Y,{size:40,w:700,al:'right',c:'#1d1d1d'});txt(v,260+w+18,Y,{size:40,w:700,al:'left',c:col,a:P(t,t0+.4,.2)});});
+      sticker('THE PEAK',1060,350,12.7,t,-7);txt('Source: U.S. Bureau of Labor Statistics estimates',W/2,520,{f:IN,w:500,size:12,c:'#777',a:P(t,12.9,.3)});x.restore();}
+    corner(t,'LOST SINCE YOU HIT PLAY*','$'+Math.floor(t*rate).toLocaleString('en-US'));}
+  else{x.fillStyle='#0b0b0b';x.fillRect(-50,-50,W+100,H+100);x.save();x.font=`italic 400 64px ${SERIF}`;x.fillStyle='#efebe3';x.textAlign='center';x.textBaseline='middle';x.globalAlpha*=P(t,13.9,.25);x.fillText('Prosperity',W/2,280);x.restore();
+    const sp=eo(P(t,14.3,.35));if(sp>0){x.strokeStyle='#d7261e';x.lineWidth=7;x.beginPath();x.moveTo(W/2-170,282);x.lineTo(W/2-170+340*sp,282);x.stroke();}
+    popAt(t,14.8,W/2,400,()=>txt('THE GREAT DEPRESSION',0,0,{size:66,w:700,ls:3,c:'#fff'}),.2);corner(t,'LOST SINCE YOU HIT PLAY*','$'+Math.floor(t*rate).toLocaleString('en-US'),true);}}
+
+// ================= C2 SURREAL B&W COLLAGE — NOSFERATU (16-31.5) =================
+function gridPaper(){x.fillStyle='#ecebe8';x.fillRect(-50,-50,W+100,H+100);x.strokeStyle='rgba(0,0,0,.09)';x.lineWidth=1;for(let i=0;i<W;i+=32){x.beginPath();x.moveTo(i,0);x.lineTo(i,H);x.stroke();}for(let i=0;i<H;i+=32){x.beginPath();x.moveTo(0,i);x.lineTo(W,i);x.stroke();}}
+function circCrop(im,sx,sy,sw,X,Y,r,filter=BW){x.save();x.beginPath();x.arc(X,Y,r,0,7);x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=16;x.fillStyle='#fff';x.fill();x.clip();x.filter=filter;x.drawImage(im,sx,sy,sw,sw,X-r,Y-r,2*r,2*r);x.restore();}
+function c2(t){const knock=SEQ.nos_knock[0],win=SEQ.nos_window[60],street=SEQ.nos_street[0];
+  if(t<18.6){gridPaper();const k=eo(P(t,16.1,.5));
+    for(let i=0;i<18;i++){const a=i/18*Math.PI*2+.15,r1=150+k*(260+rnd(i)*140);x.strokeStyle='#2c2c2c';x.lineWidth=7;x.beginPath();x.moveTo(W/2+Math.cos(a)*150,H/2+Math.sin(a)*150);x.lineTo(W/2+Math.cos(a)*r1,H/2+Math.sin(a)*r1);x.stroke();}
+    const fl=[[knock,330,90,300,220,180,70],[win,560,120,280,1060,200,62],[street,300,200,400,1080,560,58],[knock,380,150,160,200,560,48]];
+    fl.forEach(([im,sx,sy,sw,X,Y,r],i)=>{const q=back(P(t,16.2+i*.12,.3));if(q<=0)return;circCrop(im,sx,sy,sw,X+Math.sin(t*1.3+i)*8,Y+Math.cos(t+i)*8,r*q);});
+    for(let j=0;j<6;j++){const a=j/6*Math.PI*2+t*.4,R=250*k;x.save();x.translate(W/2+Math.cos(a)*R*1.5,H/2+Math.sin(a)*R*.9);x.rotate(t+j);x.fillStyle=j%2?'#d9261c':'#f5c400';x.beginPath();x.arc(0,0,34*k,0,Math.PI);x.fill();x.fillStyle='#cfcfcf';x.beginPath();x.arc(0,0,34*k,Math.PI,2*Math.PI);x.fill();x.restore();}
+    popAt(t,16.5,W/2,H/2-20,()=>{x.fillStyle='#1d1d1d';rr(-270,-62,540,124,4);x.fill();txt('NOSFERATU',0,4,{size:96,w:700,ls:6,c:'#ecebe8'});});
+    x.save();x.translate(W/2+190,H/2+70);x.rotate(-.05);x.globalAlpha*=P(t,16.9,.15);x.fillStyle='#f5c400';x.fillRect(-58,-24,116,48);txt('1922',0,2,{size:36,w:700,c:'#1d1d1d'});x.restore();
+    if(t>17.3){x.save();x.globalAlpha*=P(t,17.3,.3);x.fillStyle='#ecebe8';x.fillRect(W/2-190,H/2+124,380,32);x.restore();}txt('THE FIRST VAMPIRE ON FILM',W/2,H/2+140,{f:IN,w:800,size:16,ls:6,c:'#1d1d1d',a:P(t,17.3,.3)});}
+  else if(t<20.6){const z=eo(P(t,18.6,.5));if(z<1){gridPaper();}const r=lerp(70,900,z);x.save();x.beginPath();x.arc(W/2,H/2,r,0,7);x.clip();cover(seqFrame('nos_knock',t,18.6),0,0,W,H,1.04,.5,.35,BW);x.restore();
+    txt('KNOCK · THE ESTATE AGENT',90,H-80,{size:24,w:700,ls:4,al:'left',c:'#fff',sh:10,a:P(t,19.3,.3)});x.fillStyle='#d9261c';x.fillRect(70,H-96,5,32*P(t,19.3,.3));}
+  else if(t<23.0){gridPaper();const b=Math.sin(t*1.6)*6;x.fillStyle='#d9261c';x.beginPath();x.arc(W/2+40,330+b,210,0,7);x.fill();
+    tornPhoto(seqFrame('nos_street',t,20.6),W/2-30,380+b,620,420,-3,P(t,20.7,.35),31,1.05,BW,.5,.5);tag('WISMAR, GERMANY · FILMING LOCATION',W/2-30,640,'#1d1d1d',P(t,21.3,.3),12);}
+  else if(t<26.4){cover(seqFrame('nos_hatch',t,22.6),0,0,W,H,1.08,.4,.6,BW);const tu=P(t,23.6,2.6);
+    for(let i=0;i<4;i++){const s=((tu*1.3+i*.25)%1);x.strokeStyle=`rgba(255,255,255,${.85*(1-s)})`;x.lineWidth=3;const w=200+s*1300,h=150+s*800,cx=W*.43,cy=H*.55;x.beginPath();x.moveTo(cx-w/2,cy-h/2+h*.2);x.lineTo(cx-w/2,cy-h/2);x.lineTo(cx+w/2,cy-h/2);x.moveTo(cx+w/2,cy+h/2-h*.2);x.lineTo(cx+w/2,cy+h/2);x.lineTo(cx-w/2,cy+h/2);x.stroke();}
+    txt('COUNT ORLOK',90,H-80,{size:28,w:700,ls:5,al:'left',c:'#fff',sh:12,a:P(t,24.6,.3)});x.fillStyle='#d9261c';x.fillRect(70,H-98,5,36*P(t,24.6,.3));}
+  else if(t<29.5){cover(seqFrame('nos_window',t,26.0),0,0,W,H,1.0,.5,.5,BW);
+    const n=Math.min(9,Math.floor((t-26.6)/.07));for(let k=n;k>=1;k--){const f=seqFrame('nos_window',t-k*.1,26.0);const sx=520,sy=70,sw=300,sh=560;x.save();x.globalAlpha*=.75-k*.06;x.filter=BW;x.drawImage(f,sx,sy,sw,sh,690-k*86,110,220,410);x.restore();}
+    txt('SHADOWS · DOUBLES · ECHOES',W/2,70,{f:IN,w:800,size:14,ls:6,c:'#fff',a:P(t,27.2,.3)});}
+  else{x.fillStyle='#111';x.fillRect(0,0,W,H);x.save();x.translate(W/2,H/2);x.rotate(t*.6);for(let i=0;i<24;i++){x.rotate(Math.PI/12);x.fillStyle=i%2?'#1d1d1d':'#2c2c2c';x.beginPath();x.moveTo(0,0);x.lineTo(-90,-900);x.lineTo(90,-900);x.closePath();x.fill();}x.restore();
+    for(let i=0;i<9;i++){x.strokeStyle='rgba(255,255,255,.12)';x.lineWidth=2;x.beginPath();x.arc(W/2,H/2,((t*120+i*60)%540),0,7);x.stroke();}
+    const q=back(P(t,29.6,.3));circCrop(seqFrame('nos_ship',t,29.5),540,60,420,W/2,H/2,210*q);
+    txt('100 YEARS LATER · STILL HAUNTING',W/2,H-70,{size:28,w:700,ls:6,c:'#f5c400',a:P(t,30.2,.3)});}
+  glitch(t,22.95,.35,18);}
+
+// ================= C3 RETRO MID-CENTURY — FLEMING (31.5-46.5) =================
+function c3(t){x.fillStyle='#d8cf98';x.fillRect(-50,-50,W+100,H+100);if(t<31.55){x.fillStyle='#d8dc6a';x.fillRect(0,0,W,H);}
+  if(t<37.3){x.fillStyle='#6fae98';x.beginPath();x.arc(1010,230,165,0,7);x.fill();
+    const yr='1928',n=Math.floor(4*P(t,31.8,.4));txt(yr.slice(0,n),1170,120,{f:IN,w:900,size:64,al:'right',c:'#1d1d1d'});
+    const up=P(t,32.2,.27);if(up>0){const s=back(up);x.save();x.translate(840,H+10+(1-s)*420);x.beginPath();x.rect(-270,-590,540,590);x.clip();x.drawImage(IMG.fleming_ht,-270,-590,540,590);x.restore();}
+    [['Scientist',32.5,'#1d1d1d',56],['Alexander',32.65,'#a51c12',92],['Fleming',32.8,'#e07a1f',92]].forEach(([w2,t0,c2,sz],i)=>{const q=eo(P(t,t0,.2));txt(w2,90+(1-q)*-90,210+i*95,{f:IN,w:900,size:sz,al:'left',c:c2,a:q});});
+    const pw=eo(P(t,35.0,.3));if(pw>0){x.fillStyle='#a51c12';x.fillRect(0,0,560*pw,H);
+      txt('He noticed',70,250,{f:IN,w:700,size:32,al:'left',c:'#f3e9d0',a:P(t,35.3,.2)});txt('something',70,315,{f:IN,w:900,size:56,al:'left',c:'#f2d23a',a:P(t,35.6,.2)});txt('Strange',70,400,{f:IN,w:900,size:92,al:'left',c:'#fff',a:P(t,35.9,.2)});}}
+  else if(t<42.0){const tilt=1-.12*Math.sin(t*.8);x.save();x.translate(W/2,H/2+10);x.scale(1,tilt*.62);
+      x.fillStyle='#efe7c8';x.beginPath();x.arc(0,0,330,0,7);x.fill();x.strokeStyle='#bcae7c';x.lineWidth=10;x.stroke();x.strokeStyle='rgba(255,255,255,.6)';x.lineWidth=3;x.beginPath();x.arc(0,0,312,3.6,5.2);x.stroke();
+      for(let i=0;i<170;i++){const a=rnd(i)*7,r=150+rnd(i+5)*160;x.fillStyle='#c9b25f';x.beginPath();x.arc(Math.cos(a)*r,Math.sin(a)*r,4+rnd(i+9)*5,0,7);x.fill();}
+      const mp=eo(P(t,37.5,1.2));x.fillStyle='#3a3a2a';x.beginPath();for(let i=0;i<=36;i++){const a=i/36*Math.PI*2,r=(52+16*Math.sin(a*9))*mp;x.lineTo(Math.cos(a)*r,Math.sin(a)*r);}x.closePath();x.fill();x.fillStyle='#6e6e48';x.beginPath();x.arc(0,0,20*mp,0,7);x.fill();x.restore();
+    for(const [s,X1,Y1,X2,Y2,t0] of [['Bacteria',W/2+250,H/2+40,W/2+430,H/2+170,38.4],['Mold',W/2+20,H/2,W/2-260,H/2-210,39.0],['No bacteria here',W/2+110,H/2-30,W/2+330,H/2-220,39.6]]){const lp=eo(P(t,t0,.2));x.strokeStyle='#1d1d1d';x.lineWidth=2;x.beginPath();x.moveTo(X1,Y1);x.lineTo(lerp(X1,X2,lp),lerp(Y1,Y2,lp));x.stroke();
+      const tq=eo(P(t,t0+.2,.2));if(tq>0){x.font=font({f:IN,w:800,size:22});const w=x.measureText(s).width+24;x.save();x.translate(X2,Y2);x.scale(tq,1);x.fillStyle='#f2d23a';x.fillRect(-w/2,-18,w,36);x.restore();txt(s,X2,Y2+1,{f:IN,w:800,size:22,c:'#1d1d1d',a:tq});}}
+    tag("ST MARY'S HOSPITAL, LONDON · SEPTEMBER 1928",W/2,H-50,'#1d1d1d',P(t,40.2,.3),12);}
+  else{x.fillStyle='#f2d23a';x.beginPath();x.arc(860,330,240*back(P(t,42.1,.35)),0,7);x.fill();
+    const pc=eo(P(t,42.3,.4));x.save();x.translate(900,360+(1-pc)*420);x.rotate(lerp(7,-2,pc)*Math.PI/180);printCard(IMG.c3_fleming,460,300,{border:7,curl:0,crop:[0,0,1280,835]});x.restore();
+    [['Changed',42.6,'#1d1d1d',64],['Medicine',42.8,'#a51c12',100],['Forever',43.0,'#e07a1f',100]].forEach(([w2,t0,c2,sz],i)=>{const q=eo(P(t,t0,.2));txt(w2,90+(1-q)*-90,200+i*105,{f:IN,w:900,size:sz,al:'left',c:c2,a:q});});
+    txt('Fleming in his laboratory · Ministry of Information photo, public domain',900,560,{f:IN,w:600,size:11,c:'#5a5230',a:P(t,43.4,.3)});}}
+
+// ================= C4 PRESENTER + HERO NUMBER — APOLLO (46.5-62) =================
+function concrete(dark){x.fillStyle='#8d8d8d';x.fillRect(-50,-50,W+100,H+100);for(let i=0;i<3000;i++){x.fillStyle=`rgba(${rnd(i)>.5?255:0},${rnd(i)>.5?255:0},${rnd(i)>.5?255:0},${.05*rnd(i+3)})`;x.fillRect(rnd(i+1)*W,rnd(i+2)*H,3,3);}
+  const g=x.createRadialGradient(W*.6,H*.4,H*.1,W*.6,H*.5,H*1.1);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.6)');x.fillStyle=g;x.fillRect(0,0,W,H);if(dark>0){x.fillStyle=`rgba(8,10,9,${.88*dark})`;x.fillRect(0,0,W,H);}}
+const DIG='$25,400,000,000';
+function c4(t){if(t<48.7){cover(seqFrame('jfk_wide',t,46.5),0,0,W,H,lerp(1.02,1.08,P(t,46.5,2.2)),.5,.4,BW);
+    txt('RICE UNIVERSITY · 12 SEPTEMBER 1962',90,H-74,{f:IN,w:700,size:14,ls:4,al:'left',c:'#fff',sh:8,a:P(t,46.9,.3)});x.fillStyle='#fff';x.fillRect(70,H-86,3,24*P(t,46.9,.3));return;}
+  const dk=eo(P(t,53.2,.6));concrete(dk);
+  // hero object (color kept) with parallax
+  const hp=eo(P(t,49.7,.5));if(hp>0&&dk<1){x.save();x.globalAlpha*=hp*(1-dk);x.translate(lerp(-300,330,hp)+Math.sin(t*.7)*6,250);x.rotate(-.03);x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=30;x.shadowOffsetY=14;x.fillStyle='#fff';x.fillRect(-220,-150,440,300);x.shadowColor='transparent';cover(IMG.c4_launch,-212,-142,424,284,1.0,.5,.4);x.restore();}
+  // UI pill toggle
+  const up=P(t,51.3,.3);if(up>0&&dk<1){const on=eo(P(t,52.1,.25));x.save();x.globalAlpha*=up*(1-dk);const X=180,Y=520;x.fillStyle=`rgb(${lerp(30,40,on)},${lerp(30,200,on)},${lerp(34,220,on)})`;rr(X,Y-20,330,40,20);x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(lerp(X+20,X+310,on),Y,14,0,7);x.fill();txt('"WE CHOOSE TO GO TO THE MOON"',X+165,Y+1,{f:IN,w:800,size:12,ls:1,c:on>.5?'#06282d':'#ddd'});x.restore();}
+  // digits behind the head
+  if(t>53.4){const chars=DIG.split('');x.font=font({f:IN,w:800,size:86});x.letterSpacing='0px';const tw=x.measureText(DIG).width;let cx=W/2+40-tw/2;
+    chars.forEach((ch,i)=>{const w=x.measureText(ch).width,q=eo(P(t,53.6+rnd(i+40)*.9,.6));const sx=cx+w/2+(rnd(i)-.5)*900*(1-q),sy=230+(rnd(i+7)-.5)*500*(1-q);x.save();x.translate(sx,sy);x.rotate((rnd(i+3)-.5)*2*(1-q));x.globalAlpha*=cl(q*1.5);
+      x.fillStyle=`rgb(${lerp(20,61,q)},${lerp(90,220,q)},${lerp(40,132,q)})`;x.shadowColor='rgba(61,220,132,.5)';x.shadowBlur=18*q;txt(ch,0,0,{f:IN,w:800,size:86,c:x.fillStyle});x.restore();cx+=w;});}
+  // presenter: black circle wipe + cut-out rising
+  const cp=eo(P(t,48.8,.5));x.fillStyle='#0b0b0b';x.beginPath();x.arc(W/2+40,H+60,lerp(0,440,cp)*(1-dk*.2),0,7);x.fill();
+  const rp=back(P(t,48.95,.4));if(rp>0){x.save();x.translate(0,(1-rp)*420+Math.sin(t*.5)*3);x.filter='grayscale(1) contrast(1.2) brightness(1.05)';const s=1.35;x.drawImage(IMG.jfk_cut,-35,20,960*s,540*s);x.restore();
+    const g=x.createLinearGradient(0,H-120,0,H);g.addColorStop(0,'rgba(11,11,11,0)');g.addColorStop(1,'rgba(11,11,11,1)');x.fillStyle=g;x.fillRect(0,H-120,W,120);}
+  txt('THE APOLLO PROGRAM · TOTAL COST',W/2+40,330,{f:IN,w:700,size:14,ls:5,c:'#e8e8e8',a:P(t,56.0,.3)});
+  txt('As reported to Congress, 1973 (then-year dollars)',W/2+40,355,{f:IN,w:500,size:12,c:'#9a9a9a',a:P(t,56.4,.3)});}
+
+// ================= credits (62-66) =================
+function credits(t){x.fillStyle='#0b0b0b';x.fillRect(0,0,W,H);txt('ARCHIVE SOURCES · PUBLIC DOMAIN',W/2,150,{size:34,w:700,ls:5,c:'#f5c766',reveal:P(t,62.2,.4)});
+  ['Crowd outside the New York Stock Exchange, 1929 — Wikimedia Commons','"Migrant Mother", Dorothea Lange, 1936 — Library of Congress / Wikimedia Commons','Nosferatu (F. W. Murnau, 1922) — Internet Archive','Alexander Fleming in his laboratory — Ministry of Information / Wikimedia Commons','JFK at Rice University, 12 Sep 1962 — Internet Archive · Apollo 11 launch — NASA']
+   .forEach((s,i)=>txt(s,W/2,240+i*52,{f:IN,w:500,size:17,c:'#ddd',a:P(t,62.6+i*.15,.3)}));
+  txt('Found with find_footage.py · Commons · Internet Archive · Openverse · Reddit (traced to source)',W/2,560,{f:IN,w:600,size:13,c:'#888',a:P(t,63.6,.3)});}
+
+function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.fillStyle='#000';x.fillRect(0,0,W,H);
+  const S=[[0,16.1,c1,.02],[16.0,31.6,c2,0],[31.5,46.6,c3,.02],[46.5,62.1,c4,0],[62.0,66,credits,0]];for(const [a,b,f,pu] of S)scene(t,a,b,f,pu);
+  look('C1 · EDITORIAL PAPER · ARCHIVE PHOTOS',t,0,16);look('C2 · SURREAL B&W COLLAGE · ARCHIVE FILM 1922',t,16,31.5);look('C3 · RETRO MID-CENTURY · HALFTONE ARCHIVE',t,31.5,46.5);look('C4 · PRESENTER + HERO NUMBER · ARCHIVE FILM 1962',t,46.5,62);
+  if(t<.3){x.fillStyle=`rgba(0,0,0,${1-P(t,0,.3)})`;x.fillRect(0,0,W,H);}if(t>65.4){x.fillStyle=`rgba(0,0,0,${P(t,65.4,.6)})`;x.fillRect(0,0,W,H);}}
+async function ready(){await loadFonts('../fonts/');await loadImages({c1_nyse:'../arch/c1_nyse.jpg',c1_mother:'../arch/c1_mother.jpg',c3_fleming:'../arch/c3_fleming.jpg',c4_launch:'../arch/c4_launch.jpg',jfk_cut:'../arch/jfk_cut.png'});
+  for(const [n,c] of [['nos_hatch',210],['nos_window',180],['nos_ship',150],['nos_knock',72],['nos_street',120],['jfk_wide',150]])await loadSeq(n,'../arch/'+n,c);
+  halftoneCrop('c3_fleming','fleming_ht',249,690,476,520,540,590,6,'#d8cf98','#1d1d1d');render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>

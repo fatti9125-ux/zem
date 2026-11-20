@@ -11,6 +11,9 @@ Renders a style preview (MP4) from a single HTML/canvas scene file. The pipeline
   - `burj_khalifa_40s.html`: graphics only, looks A + B (standalone helpers).
   - `gta6_intro.html`: a 72 s narration-timed hook in look A.
   - `style_reel.html`: every look with real footage frames. It expects `../foot/*.jpg` stills extracted from clips.
+  - `archive_styles.html`: the four archive styles C1–C4 built on public-domain archive photos and **moving film**. Run `fetch_archive_assets.sh` first to build `../arch/`.
+
+**Archive video:** export clips as frame sequences (`ffmpeg -ss S -i URL -t D -vf fps=30,scale=960:-2 -q:v 4 seq/name/%03d.jpg`), then `await loadSeq(name, dir, nFrames)` in `ready()` and draw with `cover(seqFrame(name, t, t0), 0,0,W,H, scale, ax, ay, 'grayscale(1) contrast(1.35)')`. `cover()` keeps 4:3 film aspect inside 16:9. Other helpers: `glitch(t, t0)` slice glitch, `halftoneCrop()` aspect-correct halftone of a crop. Presenter cut-outs come from `../cutout.py`.
 
 ## Workflow
 1. Write the shot list first (SKILL.md format). Each row becomes a scene function `sN(t)` with absolute times, wrapped in `scene(t, start, end, fn, push)`.

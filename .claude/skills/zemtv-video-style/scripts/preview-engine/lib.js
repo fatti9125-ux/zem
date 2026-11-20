@@ -89,3 +89,20 @@ function scene(t,a,b,fn,push=.05,fx=W/2,fy=H/2){if(t<a||t>b)return;x.save();x.gl
 function popAt(t,t0,X,Y,fn,d=.25){const p=P(t,t0,d);if(p<=0)return;x.save();x.translate(X,Y);const s=back(p);x.scale(s,s);x.globalAlpha*=cl(p*3);fn();x.restore();}
 async function loadFonts(base='fonts/'){for(const w of ['600','700']){const ff=new FontFace('Oswald',`url(${base}oswald-latin-${w}-normal.woff2)`,{weight:w});await ff.load();document.fonts.add(ff);}
   for(const f of ['600 20px Inter','700 20px Inter','900 20px Inter','italic 400 20px "DejaVu Serif"'])await document.fonts.load(f);}
+
+// ---------- archive video as frame sequences ----------
+// export with: ffmpeg -i clip.mp4 -t 6 -vf "fps=30,scale=960:-2" -q:v 4 seq/name/%03d.jpg
+const SEQ={};
+async function loadSeq(name,dir,n){SEQ[name]=new Array(n);await Promise.all([...Array(n).keys()].map(i=>new Promise((res,rej)=>{const im=new Image();im.onload=()=>{SEQ[name][i]=im;res();};im.onerror=()=>rej(new Error('seq '+dir));im.src=`${dir}/${String(i+1).padStart(3,'0')}.jpg`;})));}
+// frame of a sequence at time t (started at t0); hold last frame (or loop)
+function seqFrame(name,t,t0,{fps=30,loop=false,offset=0}={}){const a=SEQ[name];let i=Math.floor((t-t0)*fps)+offset;i=loop?((i%a.length)+a.length)%a.length:Math.max(0,Math.min(a.length-1,i));return a[i];}
+// draw an image/frame covering rect (X,Y,w,h) at scale s, anchored (ax,ay) - keeps aspect (4:3 archive into 16:9)
+function cover(im,X=0,Y=0,w=W,h=H,s=1,ax=.5,ay=.5,filter=''){const iw=im.width||im.naturalWidth,ih=im.height||im.naturalHeight;const k=Math.max(w/iw,h/ih)*s;const dw=iw*k,dh=ih*k;
+  x.save();if(filter)x.filter=filter;x.beginPath();x.rect(X,Y,w,h);x.clip();x.drawImage(im,X+(w-dw)*ax,Y+(h-dh)*ay,dw,dh);x.restore();}
+// horizontal slice glitch over whatever is on the canvas (C2 transitions, 'leak' beats)
+function glitch(t,t0,dur=.35,bands=14){const p=P(t,t0,dur);if(p<=0||p>=1)return;const img=x.getImageData(0,0,W,H);for(let i=0;i<bands;i++){const y=Math.floor(rnd(i+Math.floor(t*30))*H),h=8+Math.floor(rnd(i*3+Math.floor(t*30))*40),dx=Math.floor((rnd(i*7+Math.floor(t*30))-.5)*160*Math.sin(p*Math.PI));
+  x.putImageData(img,dx,0,0,y,W,h);}x.fillStyle=`rgba(0,0,0,${.15*Math.sin(p*Math.PI)})`;x.fillRect(0,0,W,H);}
+// halftone of a crop (keeps aspect): source rect in the ORIGINAL image -> w x h canvas, stored as IMG[key]
+function halftoneCrop(name,key,sx,sy,sw,sh,w,h,cell=7,paper='#efe9d8',ink='#1a1a1a'){const src=document.createElement('canvas');src.width=w;src.height=h;const g0=src.getContext('2d');g0.filter='grayscale(1) contrast(1.25) brightness(.82)';g0.drawImage(IMG[name],sx,sy,sw,sh,0,0,w,h);
+  const d=g0.getImageData(0,0,w,h).data;const cv=document.createElement('canvas');cv.width=w;cv.height=h;const g=cv.getContext('2d');g.fillStyle=paper;g.fillRect(0,0,w,h);g.fillStyle=ink;
+  for(let y=0;y<h;y+=cell)for(let X=0;X<w;X+=cell){const i=((y+cell/2|0)*w+(X+cell/2|0))*4;const r=(1-d[i]/255)*cell*.62;if(r>.3){g.beginPath();g.arc(X+cell/2,y+cell/2,r,0,7);g.fill();}}IMG[key]=cv;return cv;}
