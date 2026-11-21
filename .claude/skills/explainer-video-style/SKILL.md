@@ -102,6 +102,17 @@ Rules:
 - Keep G/F for the hook's first line and for the last line before an end card.
 - Write the plan as a table (line, time, kind, visual) before building. Show it to the user when they ask for "mix".
 
+## Copyright-safe footage (protect the channel)
+
+Game trailers and other publishers' clips can trigger Content ID claims or strikes. Always:
+1. **No shot longer than ~3.6 s** from any one source. Run `scripts/safe_edl.py edl.json safe.json --rules rules.json` before `build_footage.py`. It splits long cuts, refills from other clean shots of the same era, and never reuses an in-point.
+2. **Ban list per source** in `rules.json`: ESRB/rating cards, "… presents" title cards, logos, end slates. Then tile the first frame of every cut to confirm.
+3. **Never use the source audio** (trailer music, dialogue). Use only the user's narration, the synthesized bed (`music_bed.py`) and SFX.
+4. **Transform every shot**: graphics, dim, crop, cards, or a white/paper scene on top. Never run a raw trailer stretch.
+5. **Mix sources**, and prefer the user's own captures or **CC-BY gameplay** (credit it).
+6. End with a sources card: "Footage: … (short excerpts for commentary) · … CC BY 4.0 · Not affiliated with …".
+7. Tell the user honestly that this lowers the risk but can't guarantee no claim. Their own recorded gameplay is the safest.
+
 ## Sync with the voice-over (non-negotiable)
 
 1. Tighten the VO first (`scripts/tighten_vo.py`). Then **transcribe the tightened audio itself** with word timestamps, in 40–50 s windows (Whisper can drop whole windows; re-run any gap on its own). Don't time against the untightened VO.
@@ -178,7 +189,7 @@ If no TTS is available, deliver the video with SFX only, plus an `.srt` of the n
 When the user wants real clips ("real gaming clips", "asli footage"), build two layers instead of drawing backgrounds:
 1. **Footage track.** Download real clips (`references/footage-sourcing.md` lists the gaming sources: official trailers on archive.org, CC-BY longplays). Write an EDL that cuts on VO words and run `scripts/build_footage.py edl.json footage.mp4`. Use `crop` to hide HUD/minimap/watermarks, `rev` for rewind beats, `split` for then-vs-now, and `black` for a hard dip.
 2. **Graphics layer.** One HTML scene file drawn on a *transparent* canvas: `x.clearRect` each frame, plus a per-scene `dim(a)` (0.2–0.35 on hero footage, 0.55–0.7 under charts). Render it with `preview-engine/render_png.js` (PNG with alpha). Composite with `ffmpeg overlay`.
-3. **Sound.** Run `scripts/music_bed.py` (an original synthesized beat; drop it out for a beat or two on big moments like a rewind), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
+3. **Sound.** Derive SFX from the scene code itself: one whoosh per scene start, a pop per `popAt`, a thud per `stamp`/`stickerW`, a click per highlighter. Then they sit on the exact animation frames. Run `scripts/music_bed.py` (an original synthesized beat; drop it out for a beat or two on big moments like a rewind), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
 4. **Mix both kinds of scene.** Keep most beats as graphics over gameplay, and every 15–30 s switch to a **white Vox-style beat** for explanation-heavy lines (records, comparisons, timelines, money flows, then-vs-now). These beats use an off-white stage or paper, **live game clips inside photo-print cards** (`clipCard`), navy labels, yellow dashed dimension lines, serif highlights and stickers. They're opaque in the overlay, so they cover the footage, and the overlay skips particles/vignette/chapter tag there. Building blocks: `preview-engine/examples/vox_scenes.js`. Card clips: 3 s sequences at 640×360 (`loadSeq`, looped).
 5. **No dead air.** Run `scripts/tighten_vo.py` on the voice-over first: every pause over 0.3 s becomes 0.15 s. If the edit was already timed to the original VO, remap it with the `T()` recipe in that file's docstring.
 6. Check the tiled composite frames (footage + overlay) before the full render. Check that no logo, ESRB card, "Rockstar Games presents" title or end-slate from a trailer shows inside a cut: tile the **first frame of every cut** (`ffmpeg -i seg/NNN.mp4 -frames:v 1`). Trailer openings fade, so start at least 0.5–1 s after a title card.
