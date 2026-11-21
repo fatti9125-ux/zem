@@ -14,8 +14,12 @@
 | **Library of Congress / NARA** | US history photos and films | mostly PD; check the "rights" field | loc.gov, catalog.archives.gov |
 | **YouTube** | discovery of newsreels and official trailers; Creative Commons filter | default licence = all rights reserved; use only CC-BY uploads or the uploader's original archive | search filters: Creative Commons |
 | **British Pathé / AP Archive / Getty** | best newsreels | licensed (paid) | note as "licence needed" in the asset list |
-| **Pexels / Pixabay / Mixkit / Coverr** | modern stock b-roll (cities, labs, crowds, phones) | free-to-use stock licences | when modern texture is needed |
+| **Pexels / Pixabay / Mixkit / Coverr** | modern stock b-roll (cities, labs, crowds, phones) | free-to-use stock licences | when modern texture is needed. **Mixkit works from cloud servers without a key**: list a tag page `https://mixkit.co/free-stock-video/<tag>/` (e.g. `miami`, `beach`, `alligator`, `neon`), take the `/free-stock-video/<slug>-<id>/` ids, then download `https://assets.mixkit.co/videos/<id>/<id>-720.mp4` (or `-1080`). Pexels/Pixabay pages return 403 there. |
 | **Game footage** (look A) | gameplay you capture; **official trailers mirrored on archive.org** (search "Grand Theft Auto VI Trailer", "Launch Trailer", "Red Dead Redemption 2 Official Trailer"; the item id often embeds the YouTube id of the official upload); **CC-BY longplays** on archive.org (e.g. "Grand Theft Auto V PlayStation 5 PAL Gameplay", CC BY 4.0) | trailers are publisher content: commentary / fair-use norms, keep each cut short (1–5 s), transformed, under narration; credit CC-BY longplays | record your own where possible; avoid cutting into ESRB cards, logos and end slates |
+
+**Host notes (cloud sessions).** Wikimedia (commons + upload) answers 429 "robot policy" to generic clients from cloud IPs; don't fight it, switch to Openverse. The Openverse API (`api.openverse.org/v1/images/?q=…&license=by,by-sa,cc0,pdm`) returns Flickr CC photos whose `live.staticflickr.com` files download fine. Skip ND/NC licences for a monetised channel. Record title, author, licence and page URL in `CREDITS.txt` and put them in the video description.
+
+**Real-place comparison videos** ("game vs real life"): for every place the script names, get one real asset (CC photo of the landmark, stock clip of the city or nature) plus the matching game shot. Build the beat as a white-stage VS (game card left, real card right, "GTA VI" / "REAL LIFE" tags, a REAL stamp on the reveal word). When no free photo of a building exists, draw a labelled illustration ("illustration") rather than borrowing a copyrighted photo.
 
 ## 2. Query recipes by style
 

@@ -106,7 +106,7 @@ Rules:
 
 Game trailers and other publishers' clips can trigger Content ID claims or strikes. Always:
 1. **No shot longer than ~3.6 s** from any one source. Run `scripts/safe_edl.py edl.json safe.json --rules rules.json` before `build_footage.py`. It splits long cuts, refills from other clean shots of the same era, and never reuses an in-point.
-2. **Ban list per source** in `rules.json`: ESRB/rating cards, "… presents" title cards, logos, end slates. Then tile the first frame of every cut to confirm.
+2. **Ban list per source** in `rules.json`: ESRB/rating cards, "… presents" title cards, logos, end slates. Then tile the **first and last frame of every cut** from the built track and look for title cards. Timestamped 1 fps contact sheets are only accurate to about ±0.5 s, so an in-point read off a sheet can land on a title card that sits next to it. Keep in-points at least 0.4 s inside a shot.
 3. **Never use the source audio** (trailer music, dialogue). Use only the user's narration, the synthesized bed (`music_bed.py`) and SFX.
 4. **Transform every shot**: graphics, dim, crop, cards, or a white/paper scene on top. Never run a raw trailer stretch.
 5. **Mix sources**, and prefer the user's own captures or **CC-BY gameplay** (credit it).
