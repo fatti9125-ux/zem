@@ -177,7 +177,9 @@ When asked to *analyze reference clips*, run `scripts/analyze_reference.sh <vide
 - Pick one self-contained 30–58s story beat (hook in the first line, payoff at the end). Propose 2–3 candidates to the user first.
 - Build **native 1080x1920**. Never letterbox a 16:9 edit into the middle with black bars. Footage is cover-cropped to fill the full frame: `build_footage.py` with `"size":[1080,1920]` in the EDL. Re-check every shot after the crop, because the subject may fall outside the centre.
 - Re-lay out the graphics for portrait: render with `lib_v.js` (`W=1080,H=1920`). Keep headlines and cards in the top 60%, stack W-stage cards vertically, and keep the right 120px and bottom 280px clear of the platform UI.
-- Use word-by-word captions (3-word groups, Oswald about 78px, Y≈1620). The active word is yellow, or red for key words. Put a thin progress bar at the bottom.
+- No burned-in captions or subtitles by default; the user turned them off. A word-by-word caption layer exists in the example (`window.CAPTIONS=true`) only if asked. Keep a thin progress bar at the bottom.
+- Trailers have baked-in black cinema bars. `build_footage.py` trims them for vertical output (`debar`, default 0.74), so no frame shows black bands. Check a 1 fps contact sheet for leftover bars.
+- Audio slice: put `-ss` **before** `-i` when cutting the mix, so the timestamps reset. With output-side `-ss`, a fade-out `st=` lands in the past and the whole track goes silent. Always run `volumedetect` on the final file (mean around -18 dB, not -91 dB).
 - Keep the same per-line style mix (G/F/W/P), the ≤3.6s clip cap and the VO sync rules. The audio is the matching slice of the full mix. End with a short beat tail (~1.5s) on a "full story / part N" end card with credits.
 - Preview example: `scripts/preview-engine/examples/short_vertical.html`.
 

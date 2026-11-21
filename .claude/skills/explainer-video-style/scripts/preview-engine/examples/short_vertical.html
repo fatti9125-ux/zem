@@ -84,7 +84,7 @@ function render(ts){const t=ts+OFF;x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x
   for(const [a,b,f] of S){if(t<a-.02||t>b+.02)continue;x.save();x.globalAlpha=cl((t-a)/.1)*(1-cl((t-(b-.1))/.1));if(a===58.9)x.globalAlpha=1;f(t);x.restore();}
   const k=(S.find(([a,b])=>t>=a&&t<b)||[0,0,0,'F'])[3];if(k==='G'||k==='F'){particles(t,40,GOLD,.5);vignette(.45);}
   for(const [a] of S)if(t>=a&&t<a+.06&&a>58.9){x.fillStyle='rgba(255,255,255,.2)';x.fillRect(0,0,W,H);}
-  captions(t);x.fillStyle='rgba(255,255,255,.18)';x.fillRect(0,H-10,W,10);x.fillStyle=GOLD;x.fillRect(0,H-10,W*cl(ts/45.05),10);}
+  if(window.CAPTIONS)captions(t);x.fillStyle='rgba(255,255,255,.18)';x.fillRect(0,H-10,W,10);x.fillStyle=GOLD;x.fillRect(0,H-10,W*cl(ts/45.05),10);}
 async function ready(){await loadFonts();for(const n of ['club','beach','boat','flam','jet','launchc','trailer','gta6'])await loadSeq(n,'cards/'+n,89);render(0);return true;}
 window.ready=ready;window.render=render;
 </script></body></html>
