@@ -1,0 +1,90 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="lib_v.js"></script>
+<script>const T=x=>x;</script>
+<script src="vox.js"></script>
+<script>
+// VERTICAL SHORT 1080x1920 — Part 2, 58.9–103.95 ("the TV-stick hacker"). Scene code uses Part-2 time t = ts + OFF.
+const OFF=58.9, END=46.65;
+function dim(a){if(a<=0)return;x.fillStyle=`rgba(7,5,10,${a})`;x.fillRect(-60,-60,W+120,H+120);}
+function gcard(X,Y,w,h,col=GOLD,fill='rgba(20,12,4,.65)'){x.fillStyle=fill;x.strokeStyle=col;x.lineWidth=2;rr(X-w/2,Y-h/2,w,h,14);x.fill();x.stroke();}
+function wcard(X,Y,w,h){x.save();x.shadowColor='rgba(0,0,0,.22)';x.shadowBlur=24;x.shadowOffsetY=10;x.fillStyle='#fff';rr(X-w/2,Y-h/2,w,h,16);x.fill();x.restore();}
+function kickV(s,t,t0,y,col='#444'){txt(s,W/2,y,{f:IN,w:800,size:26,ls:6,c:col,a:P(t,t0,.25)});}
+function laptop(X,Y,col='#1d1d1d',s=1){x.save();x.translate(X,Y);x.scale(s,s);x.strokeStyle=col;x.lineWidth=6;x.strokeRect(-80,-60,160,100);x.beginPath();x.moveTo(-105,52);x.lineTo(105,52);x.lineTo(90,62);x.lineTo(-90,62);x.closePath();x.stroke();x.restore();}
+function devIcon(kind,X,Y){x.save();x.translate(X,Y);x.strokeStyle=NAVY;x.fillStyle=NAVY;x.lineWidth=6;
+  if(kind==='stick'){rr(-80,-20,160,40,8);x.stroke();x.fillRect(-102,-11,24,22);txt('fire tv',10,1,{f:IN,w:800,size:18,c:NAVY});}
+  if(kind==='phone'){rr(-34,-62,68,124,12);x.stroke();x.beginPath();x.arc(0,48,5,0,7);x.fill();}
+  if(kind==='tv'){x.strokeRect(-80,-52,160,96);x.beginPath();x.moveTo(-30,62);x.lineTo(30,62);x.stroke();x.beginPath();x.moveTo(0,44);x.lineTo(0,62);x.stroke();}x.restore();}
+function serifC(s,y,size,a,bold=false){x.save();x.globalAlpha*=a;x.font=`italic ${bold?700:400} ${size}px "DejaVu Serif"`;x.fillStyle='#1d1d1d';x.textAlign='center';x.textBaseline='middle';x.fillText(s,W/2,y);x.restore();}
+function hlBar(X,Y,w,h,p){if(p<=0)return;x.save();x.globalCompositeOperation='multiply';x.fillStyle='#ffe14d';x.fillRect(X,Y,w*eo(p),h);x.restore();}
+
+// V14 F — hook (58.9–62.6)
+function V14(t){dim(.35);const q=eo(P(t,58.95,.35));x.save();x.translate(0,(1-q)*30);x.globalAlpha*=q;
+  txt('AN 18-YEAR-OLD',W/2,560,{size:96,w:700,ls:3,c:'#fff',sh:20});txt('HACKED GTA 6',W/2,690,{size:128,gold:1,ls:3,glow:40});txt('WITH A TV STICK',W/2,820,{size:96,w:700,ls:3,c:'#fff',sh:20});x.restore();
+  txt('A TRUE STORY · SEPTEMBER 2022',W/2,940,{f:IN,w:800,size:24,ls:5,c:'#ffd400',a:P(t,59.6,.3)});}
+// V15 W — 90+ videos leaked (62.6–70.2)
+function V15(t){stageW();txt('90+ UNFINISHED',W/2,250,{size:80,w:700,ls:3,c:NAVY,a:P(t,62.86,.25)});txt('GAMEPLAY VIDEOS LEAKED',W/2,340,{size:60,w:700,ls:3,c:NAVY,a:P(t,63.2,.25)});
+  const ks=['club','beach','boat','flam','jet','launchc','trailer','gta6'];ks.forEach((k,i)=>{const X=300+(i%2)*480,Y=520+Math.floor(i/2)*230,q=back(P(t,63.4+i*.08,.25));if(q<=0)return;x.save();x.translate(X,Y);x.scale(q,q);
+    x.fillStyle='#fff';x.shadowColor='rgba(0,0,0,.2)';x.shadowBlur=14;x.fillRect(-215,-104,430,208);x.shadowBlur=0;cover(seqFrame(k,t,63,{loop:true}),-206,-95,412,190,1,.5,.5,'blur(7px)');txt('LEAKED',0,2,{size:34,w:700,ls:6,c:'#d7261e'});x.restore();});
+  [['CHARACTERS',67.42],['VICE CITY',68.06],['A RESTAURANT ROBBERY',69.14]].forEach(([s,t0],i)=>popAt(t,t0,W/2,1440+i*0,()=>{}));
+  const chips=[['CHARACTERS',67.42],['VICE CITY',68.06],['A ROBBERY SCENE',69.14]];let X0=W/2-(chips.length-1)*170;chips.forEach(([s,t0],i)=>popAt(t,t0,X0+i*340,1440,()=>{x.fillStyle=NAVY;rr(-160,-32,320,64,32);x.fill();txt(s,0,2,{f:IN,w:800,size:20,ls:3,c:'#fff'});}));
+  txt('Blurred stand-ins: frames from official trailers',W/2,1520,{f:IN,w:500,size:18,c:'#888',a:P(t,64,.3)});}
+// V16a P — first look, without permission (70.2–73.8)
+function V16a(t){paperW();kickV("IT WAS THE GAME'S",t,70.24,560);serifC('first look',720,96,P(t,70.98,.3),true);hlBar(W/2-260,680,520,84,P(t,71.24,.3));serifC('first look',720,96,P(t,70.98,.3),true);
+  stampV('WITHOUT ROCKSTAR\'S PERMISSION',W/2,960,73.0,t,'#c8202b',-5,44);}
+// V16b P — not a hacking team (73.8–77.9)
+function V16b(t){paperW();kickV('WHO DID IT?',t,73.9,520);serifC('Not a big',700,92,P(t,74.8,.3));serifC('hacking team.',820,92,P(t,75.9,.3));stampV('NO TEAM',W/2,1030,76.88,t,'#c8202b',-8,72);}
+function stampV(s,X,Y,t0,t,col,rot,size){stamp(s,X,Y,t0,t,col,rot,size);}
+// V17 G — 18, British, on bail, hotel (77.9–86.8)
+function V17(t){dim(.66);popAt(t,78.5,W/2,520,()=>{gcard(0,0,860,220,RED,'rgba(30,4,8,.82)');txt('AN 18-YEAR-OLD',0,-30,{size:96,w:700,ls:3,c:'#fff'});txt('FROM BRITAIN · AS REPORTED',0,62,{f:IN,w:800,size:24,ls:5,c:'#ff8090'});});
+  txt('ALREADY ACCUSED OF',W/2,760,{size:46,w:700,ls:3,c:'#fff',sh:14,a:P(t,80.2,.3)});txt('HACKING OTHER BIG COMPANIES',W/2,830,{size:46,w:700,ls:2,c:'#fff',sh:14,a:P(t,80.82,.3)});
+  stamp('ON POLICE BAIL',W/2,1010,84.02,t,RED,-6,58);stamp('KEPT IN A HOTEL',W/2,1190,85.74,t,GOLD,5,58);}
+// V18 P — laptop taken; didn't give up (86.8–89.9)
+function V18(t){paperW();laptop(W/2,600,'#1d1d1d',1.8);const p=P(t,87.42,.3);if(p>0){x.save();x.translate(W/2,600);x.rotate(-.1);x.globalAlpha*=cl(p*3);x.strokeStyle='#d7261e';x.lineWidth=16;x.beginPath();x.moveTo(-190,-140);x.lineTo(190,140);x.moveTo(190,-140);x.lineTo(-190,140);x.stroke();x.restore();}
+  stickerW('LAPTOP SEIZED',W/2,830,87.6,t,-6,'#d7261e',40);serifC('But he',1040,72,P(t,88.62,.25));serifC("didn't give up.",1140,80,P(t,89.06,.25),true);hlBar(W/2-330,1105,660,72,P(t,89.3,.3));serifC("didn't give up.",1140,80,P(t,89.06,.25),true);}
+// V19 W — Fire TV Stick + phone + hotel TV -> Rockstar's systems (89.9–99.8)
+function V19(t){stageW();txt('FROM A HOTEL ROOM',W/2,230,{size:72,w:700,ls:4,c:NAVY,a:P(t,90.36,.25)});
+  [['stick',91.78,'AMAZON FIRE TV STICK',430],['phone',93.96,'A MOBILE PHONE',650],['tv',95.6,'THE HOTEL TV',870]].forEach(([k,t0,l,Y])=>{const q=back(P(t,t0,.3));if(q<=0)return;x.save();x.translate(W/2,Y);x.scale(q,q);wcard(0,0,680,180);devIcon(k,-200,0);txt(l,-70,0,{f:IN,w:800,size:26,ls:2,al:'left',c:NAVY});x.restore();});
+  const ap=eo(P(t,96.9,.5));if(ap>0){x.strokeStyle=NAVY;x.lineWidth=6;x.setLineDash([16,12]);x.beginPath();x.moveTo(W/2,970);x.lineTo(W/2,970+170*ap);x.stroke();x.setLineDash([]);}
+  popAt(t,97.64,W/2,1270,()=>{x.fillStyle=NAVY;x.shadowColor='rgba(0,0,0,.3)';x.shadowBlur=24;rr(-330,-110,660,220,18);x.fill();x.shadowBlur=0;txt("ROCKSTAR'S",0,-34,{size:64,w:700,ls:3,c:'#fff'});txt('INTERNAL SYSTEMS',0,40,{size:52,w:700,ls:3,c:'#ffd400'});});}
+// V20 G — billion-dollar security vs a TV stick (99.8–103.95)
+function V20(t){dim(.62);txt('A BILLION-DOLLAR',W/2,520,{size:84,w:700,ls:3,c:'#fff',sh:16,reveal:P(t,100.4,.4)});txt("COMPANY'S SECURITY",W/2,620,{size:70,w:700,ls:3,c:'#fff',sh:16,reveal:P(t,101.5,.4)});
+  popAt(t,102.18,W/2,760,()=>txt('vs',0,0,{size:64,w:700,c:GOLD}));popAt(t,102.88,W/2,920,()=>{gcard(0,0,760,170,GOLD,'rgba(20,12,4,.8)');txt('A TV STICK',0,6,{size:110,gold:1,ls:4,glow:30});});
+  if(t>103.56){const k=P(t,103.56,.25);x.strokeStyle=`rgba(255,255,255,${.9})`;x.lineWidth=5;x.beginPath();x.moveTo(380,330);x.lineTo(lerp(380,560,k),lerp(330,560,k));x.lineTo(lerp(560,500,k),lerp(560,700,k));x.lineTo(lerp(500,700,k),lerp(700,1100,k));x.stroke();}}
+// END (103.95–105.55)
+function VEND(t){dim(.75);txt('FULL STORY',W/2,700,{size:60,w:700,ls:8,c:'#fff',a:P(t,104.05,.25)});txt('GTA 6 · PART 2',W/2,810,{size:96,gold:1,ls:4,glow:30,a:P(t,104.15,.25)});
+  popAt(t,104.35,W/2,980,()=>{x.fillStyle='#d7261e';rr(-210,-56,420,112,56);x.fill();txt('SUBSCRIBE',0,3,{size:52,w:700,ls:5,c:'#fff'});});
+  ['Footage: Rockstar Games trailers (short excerpts for commentary)','Not affiliated with Rockstar Games'].forEach((l,i)=>txt(l,W/2,1700+i*32,{f:IN,w:500,size:20,c:'#bbb',a:P(t,104.3,.3)}));}
+
+// word-by-word captions (Roman Urdu), Part-2 times
+const WORDS=[[59.12,'Ek'],[59.74,'subah'],[60.0,'gamers'],[60.48,'ne'],[60.62,'internet'],[61.08,'khola'],[61.36,'to'],[61.5,'sab'],[61.72,'hairaan'],[62.06,'reh'],[62.26,'gaye'],
+ [62.86,'GTA 6'],[63.64,'ki'],[63.86,'90'],[64.2,'se'],[64.4,'zyada'],[64.52,'adhoori'],[64.96,'gameplay'],[65.46,'videos'],[65.84,'online'],[66.12,'leak'],[66.4,'ho'],[66.52,'gayi'],[66.74,'thi'],
+ [66.94,'In'],[67.3,'mein'],[67.42,'kirdaar'],[67.84,'the,'],[68.06,'Vice'],[68.5,'City,'],[68.86,'restaurant'],[69.14,'dakaiti'],[69.58,'ka'],[69.72,'scene'],[69.94,'bhi'],[70.06,'tha'],
+ [70.24,'Ye'],[70.6,'game'],[70.86,'ki'],[71.02,'pehli'],[71.24,'jhalak'],[71.52,'thi,'],[71.72,'aur'],[72.2,'wo'],[72.42,'bhi'],[72.56,'Rockstar'],[73.0,'ki'],[73.12,'marzi'],[73.46,'ke'],[73.64,'bina'],
+ [73.92,'Ye'],[74.82,'leak'],[75.22,'kisi'],[75.92,'badi'],[76.16,'hacking'],[76.56,'team'],[76.88,'ne nahi'],[77.58,'kiya'],[77.8,'tha'],
+ [77.96,'Ye'],[78.34,'ek'],[78.5,'18'],[78.86,'saal'],[79.08,'ka'],[79.24,'British'],[79.52,'ladka'],[79.82,'tha'],[80.0,'jo'],[80.2,'pehle'],[80.56,'hi'],[80.82,'doosri'],[81.2,'badi'],[81.4,'companiyon'],[81.86,'ko'],
+ [82.22,'hack'],[82.56,'karne'],[82.86,'ke'],[83.0,'ilzaam'],[83.4,'mein'],[83.64,'police'],[83.88,'ki'],[84.02,'zamaanat'],[84.4,'par'],[84.58,'tha'],
+ [84.9,'Police'],[85.18,'ne'],[85.34,'use'],[85.56,'ek'],[85.74,'hotel'],[86.02,'mein'],[86.14,'rakha'],[86.38,'hua'],[86.58,'tha'],[86.78,'aur'],[87.04,'uska'],[87.42,'laptop'],[87.9,'le'],[88.14,'liya'],[88.26,'gaya'],[88.48,'tha'],
+ [88.62,'Lekin'],[89.06,'usne'],[89.3,'haar'],[89.58,'nahi'],[89.76,'maani'],
+ [90.36,'Hotel'],[90.66,'ke'],[90.8,'kamre'],[91.12,'mein'],[91.34,'usne'],[91.6,'ek'],[91.78,'Amazon'],[92.22,'Fire'],[92.6,'TV'],[92.94,'Stick,'],[93.3,'ek'],[93.96,'mobile'],[94.36,'phone'],
+ [94.7,'aur'],[95.12,'hotel'],[95.42,'ka'],[95.6,'TV'],[95.84,'istemaal'],[96.28,'kiya'],[96.58,'aur'],[96.88,'isi'],[97.14,'setup'],[97.48,'se'],[97.64,'Rockstar'],[98.14,'ke'],[98.3,'andaroni'],[98.76,'system'],[99.12,'tak'],[99.36,'pahunch'],[99.64,'gaya'],
+ [99.92,'Sochiye,'],[100.36,'ye'],[100.52,'arbon'],[101.2,'dollar'],[101.5,'ki'],[101.64,'company'],[102.04,'ki'],[102.18,'security'],[102.68,'ek'],[102.88,'TV'],[103.14,'stick'],[103.4,'se'],[103.56,'toot'],[103.78,'gayi']];
+const HOT=new Set(['GTA 6','90','leak','Rockstar','marzi','bina','hacking','18','British','police','zamaanat','hotel','laptop','haar','Amazon','Fire','TV','Stick,','mobile','phone','andaroni','system','arbon','dollar','security','stick','toot','gayi']);
+// group into lines of ~3 words, show current group, highlight the active word
+const GROUPS=[];for(let i=0;i<WORDS.length;){const g=[];while(i<WORDS.length&&g.length<3){g.push(WORDS[i]);i++;if(/[,]$/.test(g[g.length-1][1]))break;}GROUPS.push(g);}
+function captions(t){if(t>103.95+0.35)return;let gi=-1;for(let i=0;i<GROUPS.length;i++)if(t>=GROUPS[i][0][0]-.05)gi=i;if(gi<0)return;const g=GROUPS[gi];const gEnd=(GROUPS[gi+1]?GROUPS[gi+1][0][0]:104.3);if(t>gEnd+.05)return;
+  const size=78;x.font=font({size,w:700});x.letterSpacing='1px';const ws=g.map(w=>x.measureText(w[1].toUpperCase()).width);const total=ws.reduce((a,b)=>a+b,0)+(g.length-1)*22;let X=W/2-total/2;const Y=1620;
+  const pop=back(P(t,g[0][0]-.05,.18));x.save();x.translate(W/2,Y);x.scale(.9+.1*pop,.9+.1*pop);x.translate(-W/2,-Y);
+  g.forEach((w,i)=>{const active=t>=w[0]&&(i===g.length-1||t<g[i+1][0]);const said=t>=w[0];const s=w[1].toUpperCase();x.save();x.font=font({size,w:700});x.letterSpacing='1px';x.textAlign='left';x.textBaseline='middle';
+    x.lineWidth=12;x.strokeStyle='rgba(0,0,0,.9)';x.lineJoin='round';x.strokeText(s,X,Y);x.fillStyle=active?(HOT.has(w[1])?'#ff3b4e':'#ffd400'):(said?'#ffffff':'rgba(255,255,255,.55)');x.fillText(s,X,Y);x.restore();X+=ws[i]+22;});x.restore();}
+
+const S=[[58.9,62.6,V14,'F'],[62.6,70.2,V15,'W'],[70.2,73.8,V16a,'P'],[73.8,77.9,V16b,'P'],[77.9,86.8,V17,'G'],[86.8,89.9,V18,'P'],[89.9,99.8,V19,'W'],[99.8,103.95,V20,'G'],[103.95,105.6,VEND,'F']];
+function render(ts){const t=ts+OFF;x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.clearRect(0,0,W,H);
+  for(const [a,b,f] of S){if(t<a-.02||t>b+.02)continue;x.save();x.globalAlpha=cl((t-a)/.1)*(1-cl((t-(b-.1))/.1));if(a===58.9)x.globalAlpha=1;f(t);x.restore();}
+  const k=(S.find(([a,b])=>t>=a&&t<b)||[0,0,0,'F'])[3];if(k==='G'||k==='F'){particles(t,40,GOLD,.5);vignette(.45);}
+  for(const [a] of S)if(t>=a&&t<a+.06&&a>58.9){x.fillStyle='rgba(255,255,255,.2)';x.fillRect(0,0,W,H);}
+  captions(t);x.fillStyle='rgba(255,255,255,.18)';x.fillRect(0,H-10,W,10);x.fillStyle=GOLD;x.fillRect(0,H-10,W*cl(ts/45.05),10);}
+async function ready(){await loadFonts();for(const n of ['club','beach','boat','flam','jet','launchc','trailer','gta6'])await loadSeq(n,'cards/'+n,89);render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>

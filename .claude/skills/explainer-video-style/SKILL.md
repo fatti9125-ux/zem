@@ -172,6 +172,15 @@ When asked to *critique* an edit, compare it against sections 3–4 and the moti
 
 When asked to *analyze reference clips*, run `scripts/analyze_reference.sh <video>...`. It writes contact sheets (1 frame per second), 30-fps frame strips on request, a cut list and a still/motion ratio. Then view the sheets and describe palette, type, layout, moves (with frame counts) and pacing, in the same vocabulary as this skill.
 
+## Vertical Shorts / Reels (9:16)
+
+- Pick one self-contained 30–58s story beat (hook in the first line, payoff at the end). Propose 2–3 candidates to the user first.
+- Build **native 1080x1920**. Never letterbox a 16:9 edit into the middle with black bars. Footage is cover-cropped to fill the full frame: `build_footage.py` with `"size":[1080,1920]` in the EDL. Re-check every shot after the crop, because the subject may fall outside the centre.
+- Re-lay out the graphics for portrait: render with `lib_v.js` (`W=1080,H=1920`). Keep headlines and cards in the top 60%, stack W-stage cards vertically, and keep the right 120px and bottom 280px clear of the platform UI.
+- Use word-by-word captions (3-word groups, Oswald about 78px, Y≈1620). The active word is yellow, or red for key words. Put a thin progress bar at the bottom.
+- Keep the same per-line style mix (G/F/W/P), the ≤3.6s clip cap and the VO sync rules. The audio is the matching slice of the full mix. End with a short beat tail (~1.5s) on a "full story / part N" end card with credits.
+- Preview example: `scripts/preview-engine/examples/short_vertical.html`.
+
 ## 6. Rendering a preview video
 
 When the user wants to *see* it ("preview", "sample", "bana ke do", "make the video"), render an MP4 with the bundled engine in `scripts/preview-engine/`. Don't stop at a shot list. Read its `README.md` and follow it:
