@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Search online platforms for archive photos / footage for a ZemTV video, and record licence + source.
+"""Search online platforms for archive photos / footage for an explainer video, and record licence + source.
 
 Usage:
   python3 -I find_footage.py "1929 stock market crash" [--type video|image|any] [--sources commons,archive,openverse,reddit]
@@ -18,7 +18,7 @@ Writes footage_sources.json (and, with --download, the files + a CREDITS.txt) so
 """
 import argparse, json, os, re, sys, urllib.parse, urllib.request
 
-UA = "ZemTVFootageFinder/1.1 (educational documentary research; python-urllib)"
+UA = "ExplainerFootageFinder/1.1 (educational documentary research; python-urllib)"
 
 def get(url, timeout=20, tries=5):
     import time, urllib.error

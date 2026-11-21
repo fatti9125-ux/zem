@@ -119,7 +119,7 @@ function s13(t){txt('ONE LAST THING — ONLY FOR GAMERS IN',W/2,120,{size:32,w:6
     txt(l,X,440,{size:28,w:700,ls:6,c:'#fff',a:P(t,t0+.2,.3)});}
   txt('YOU MIGHT NOT LIKE IT',W/2,530,{size:30,w:700,ls:6,c:RED,a:P(t,65.6,.3)});stamp('WATCH TILL THE END',W/2,610,66.9,t,GOLD,-4,34);}
 function ident(t){if(t<68.8)return;x.save();x.globalAlpha=P(t,68.8,.3)*(1-P(t,71.5,.5));x.fillStyle='#050d08';x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,H/2,0,W/2,H/2,H*.7);g.addColorStop(0,'rgba(40,150,80,.35)');g.addColorStop(1,'rgba(40,150,80,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
-  particles(t,40,'#5fe08f',.6);zLogo(W/2,H/2-30,160,P(t,69.1,.27));const q=eo(P(t,69.7,.3));txt('WELCOME TO ZEMTV',W/2,H/2+100+(1-q)*10,{size:26,w:600,ls:8,c:'#e8ffe9',a:q});vignette(.7);x.restore();}
+  particles(t,40,'#5fe08f',.6);zLogo(W/2,H/2-30,160,P(t,69.1,.27));const q=eo(P(t,69.7,.3));txt('PART 1',W/2,H/2+100+(1-q)*10,{size:26,w:600,ls:8,c:'#e8ffe9',a:q});vignette(.7);x.restore();}
 
 function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.fillStyle='#000';x.fillRect(0,0,W,H);
   bgA(t);x.save();x.globalAlpha=P(t,0,.4);

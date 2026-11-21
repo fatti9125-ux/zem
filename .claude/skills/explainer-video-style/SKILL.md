@@ -1,9 +1,9 @@
 ---
-name: zemtv-video-style
-description: House animation and editing style for ZemTV-type YouTube documentaries and explainers. Turn a script, topic or voice-over (English or Roman Urdu/Hindi) into a shot-by-shot edit plan AND a rendered preview MP4, with on-screen text, motion graphics, real-footage treatment, frame timings, colours, transitions and SFX, in one of three looks — dark-gold data explainer (budgets, sales, business, games), white-evidence documentary (history, mysteries, science, maps, documents, field footage), or collage (editorial paper, surreal B&W, retro mid-century). Use this skill whenever the user wants to plan, storyboard, animate, edit, preview, "video bana ke do", script visuals for, or critique a faceless/explainer/documentary video, asks for "the same style as my channel / ZemTV / the GTA video / the Noah's Ark video", wants motion-graphics specs for After Effects, Premiere, CapCut, Remotion, Blender or ffmpeg, or wants to analyze reference clips frame by frame — even if they don't say "style guide".
+name: explainer-video-style
+description: Animation and editing style for faceless YouTube documentaries and explainers (gaming, money, history, science). Turn a script, topic or voice-over (English or Roman Urdu/Hindi) into a shot-by-shot edit plan AND a rendered preview MP4, with on-screen text, motion graphics, real-footage treatment, frame timings, colours, transitions and SFX, in one of three looks — dark-gold data explainer (budgets, sales, business, games), white-evidence documentary (history, mysteries, science, maps, documents, field footage), or collage (editorial paper, surreal B&W, retro mid-century). Use this skill whenever the user wants to plan, storyboard, animate, edit, preview, "video bana ke do", script visuals for, or critique a faceless/explainer/documentary video, asks for "the same style as my channel / the GTA video / the Noah's Ark video / these reference clips", wants motion-graphics specs for After Effects, Premiere, CapCut, Remotion, Blender or ffmpeg, or wants to analyze reference clips frame by frame — even if they don't say "style guide".
 ---
 
-# ZemTV video style
+# Explainer video style
 
 This skill captures a measured house style. It was reverse-engineered frame by frame from these sources:
 - a 17.5-min GTA VI budget explainer (35 clips)
@@ -67,14 +67,14 @@ If a platform is blocked or needs a key (Reddit's API needs a token for `oauth.r
 
 **Not covered yet:** a cartoon-character / flat-illustration look (portraits that turn into characters, courtrooms, maps with armies). The user described these clips but they never arrived. If asked for that look, say so and ask for the clips.
 
-**Narration language.** ZemTV narrates in Urdu/Hindi (Roman script) but keeps **on-screen text in English caps**. Localise money where it helps (`$2,000,000,000 → 2 ARAB US DOLLARS → PKR 56,000 CRORE`). Pace Urdu/Hindi VO at about 2.3 words/s when timing without a recording.
+**Narration language.** Narration is often Urdu/Hindi (Roman script) but keeps **on-screen text in English caps**. Localise money where it helps (`$2,000,000,000 → 2 ARAB US DOLLARS → PKR 56,000 CRORE`). Pace Urdu/Hindi VO at about 2.3 words/s when timing without a recording.
 
 ## 2. Structure the video
 
 Both long-form sources follow the same arc. Adapt the lengths, but keep the order:
 
 1. **Cold-open hook (0:00–0:40).** Fast montage, the hero number or question, and a rolling counter or reveal. End on a question card ("COINCIDENCE OR SOMETHING ELSE?", "$2 BILLION — CONFIRMED?").
-2. **Channel ident (~0:40–1:15).** Green rounded-square "Z" on a dark radial glow, 2–3 s, then optionally "WELCOME TO ZEMTV".
+2. **No channel ident unless the user has one.** The reference videos had a channel logo sting. **Never put a channel name or logo the user did not give you**. If they supply a logo, a 1–2 s sting after the hook is fine. Otherwise cut straight from the hook into Part 1.
 3. **Context.** Who, where and when: portraits with name labels, maps, a timeline.
 4. **Explain blocks.** Each one is a 60–120 s "chapter". Each chapter:
    - opens on a top-centre headline question ("WHERE DOES THE MONEY GO?", "WHY ESTIMATES DIFFER")
@@ -83,7 +83,31 @@ Both long-form sources follow the same arc. Adapt the lengths, but keep the orde
 5. **Breather montages** between chapters (10–30 s). Footage cut to the beat, with a one-word label per shot (`BUILDINGS · CARS · TRAFFIC · JUNGLE`). These reset attention.
 6. **Counterpoint / caveat chapter.** "UNCONFIRMED", "HYPOTHETICAL", "WHAT CRITICS SAY". Both sources flag uncertainty explicitly, and this builds trust.
 7. **Recap montage.** Bullet labels accumulate as lower-thirds (`|YEARS OF WORK`, `|BILLION-DOLLAR ESTIMATES`, `|THE HOPES OF MILLIONS`).
-8. **Closing questions → end card.** Hero symbol plus 2–3 open questions. Then "THANKS FOR WATCHING", a WATCH NEXT frame, LIKE/SHARE/COMMENT pills popping in one at a time, and the green Z with SUBSCRIBE (~10 s).
+8. **Closing questions → end card.** Hero symbol plus 2–3 open questions. Then an end card: "TO BE CONTINUED" / "THANKS FOR WATCHING", optionally a WATCH NEXT frame and LIKE/SHARE/COMMENT pills. Use the user's own logo only if they gave one.
+
+## Per-line style choice (mix, never blocks)
+
+For a footage-led video, decide the treatment **line by line** from what the sentence does, then alternate. Never run all footage scenes first and all white scenes after.
+
+| Kind | Use when the line… | Example lines |
+|---|---|---|
+| **G** graphics over gameplay (dimmed footage + gold type/counters/diagrams) | gives a dramatic number, a time, a hook, tension, a reveal | "12 baje", "1 arab dollar", "13 saal kyun?", pressure gauge, "$500M a year" |
+| **F** full-bleed footage + minimal type | announces a game/era/event, or is a breather or montage | "GTA V launch hui", "phir aaya GTA Online", "ab zara sochiye", "Rockstar khamosh nahi tha" |
+| **W** white Vox stage + live clip cards | compares, lists, sequences or explains a mechanism | screens wall, PS3→PS4→PC→PS5 cards, then-vs-now with a dimension line, real money → GTA$, RDR2 → GTA VI |
+| **P** editorial paper + torn prints, serif highlight, stickers | makes a claim, quotes a record, asks a pointed question, makes a human/emotional point | budget vs Hollywood, Guinness record, "galti ki gunjaish nahi", "10 saal ka tha → 23", "practice thi" |
+
+Rules:
+- At most **2 consecutive lines of the same kind**. A G→F pair counts as one footage stretch.
+- **W/P every 15–30 s.** Each W/P scene still shows game footage: live clip cards or torn prints of frames.
+- Keep G/F for the hook's first line and for the last line before an end card.
+- Write the plan as a table (line, time, kind, visual) before building. Show it to the user when they ask for "mix".
+
+## Sync with the voice-over (non-negotiable)
+
+1. Tighten the VO first (`scripts/tighten_vo.py`). Then **transcribe the tightened audio itself** with word timestamps, in 40–50 s windows (Whisper can drop whole windows; re-run any gap on its own). Don't time against the untightened VO.
+2. Every scene starts on the first word of its line (or ≤ 0.1 s before). Every number, stamp, card or highlight lands on the frame its key word is spoken.
+3. Cuts in the footage EDL use the same line boundaries.
+4. Before the full render, composite one frame near the end of every line (footage + overlay) and check that what is on screen matches what is being said.
 
 ## 3. Pacing rules (measured)
 
@@ -152,9 +176,9 @@ If no TTS is available, deliver the video with SFX only, plus an `.srt` of the n
 ### Footage-led edits (real gameplay / archive under graphics)
 
 When the user wants real clips ("real gaming clips", "asli footage"), build two layers instead of drawing backgrounds:
-1. **Footage track.** Download real clips (`references/footage-sourcing.md` lists the gaming sources: official trailers on archive.org, CC-BY longplays). Write an EDL that cuts on VO words and run `scripts/build_footage.py edl.json footage.mp4`. Use `crop` to hide HUD/minimap/watermarks, `rev` for rewind beats, `split` for then-vs-now, and `black` for the ident.
+1. **Footage track.** Download real clips (`references/footage-sourcing.md` lists the gaming sources: official trailers on archive.org, CC-BY longplays). Write an EDL that cuts on VO words and run `scripts/build_footage.py edl.json footage.mp4`. Use `crop` to hide HUD/minimap/watermarks, `rev` for rewind beats, `split` for then-vs-now, and `black` for a hard dip.
 2. **Graphics layer.** One HTML scene file drawn on a *transparent* canvas: `x.clearRect` each frame, plus a per-scene `dim(a)` (0.2–0.35 on hero footage, 0.55–0.7 under charts). Render it with `preview-engine/render_png.js` (PNG with alpha). Composite with `ffmpeg overlay`.
-3. **Sound.** Run `scripts/music_bed.py` (an original synthesized beat that drops out for the ident), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
+3. **Sound.** Run `scripts/music_bed.py` (an original synthesized beat; drop it out for a beat or two on big moments like a rewind), add SFX events on every graphic, and duck the bed under the VO with `sidechaincompress`. The mix should land within about 1 LU of the VO alone.
 4. **Mix both kinds of scene.** Keep most beats as graphics over gameplay, and every 15–30 s switch to a **white Vox-style beat** for explanation-heavy lines (records, comparisons, timelines, money flows, then-vs-now). These beats use an off-white stage or paper, **live game clips inside photo-print cards** (`clipCard`), navy labels, yellow dashed dimension lines, serif highlights and stickers. They're opaque in the overlay, so they cover the footage, and the overlay skips particles/vignette/chapter tag there. Building blocks: `preview-engine/examples/vox_scenes.js`. Card clips: 3 s sequences at 640×360 (`loadSeq`, looped).
 5. **No dead air.** Run `scripts/tighten_vo.py` on the voice-over first: every pause over 0.3 s becomes 0.15 s. If the edit was already timed to the original VO, remap it with the `T()` recipe in that file's docstring.
 6. Check the tiled composite frames (footage + overlay) before the full render. Check that no logo, ESRB card, "Rockstar Games presents" title or end-slate from a trailer shows inside a cut: tile the **first frame of every cut** (`ffmpeg -i seg/NNN.mp4 -frames:v 1`). Trailer openings fade, so start at least 0.5–1 s after a title card.
@@ -175,4 +199,6 @@ Give tool-specific notes only for the tool the user uses.
 - [ ] Each number has a caveat or source line.
 - [ ] Colours follow the meaning rules throughout.
 - [ ] Each chapter opens with a question headline and closes with a takeaway.
-- [ ] The ident, the breather montages and the end card are present.
+- [ ] Breather montages and an end card are present. No channel name or logo the user did not provide.
+- [ ] Styles alternate per line (see "Per-line style choice"); no long block of one kind.
+- [ ] Every visual change lands on its VO word (checked against word timestamps of the FINAL audio).

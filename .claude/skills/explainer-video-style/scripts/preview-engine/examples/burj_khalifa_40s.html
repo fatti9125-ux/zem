@@ -106,7 +106,7 @@ function sIdent(t){ // 14.4 - 17.0
   if(t<14.2||t>17.05)return;x.save();x.globalAlpha=P(t,14.3,.3)*(1-P(t,16.6,.4));
   x.fillStyle='#050d08';x.fillRect(0,0,W,H);const g=x.createRadialGradient(W/2,H/2,0,W/2,H/2,H*.7);g.addColorStop(0,'rgba(40,150,80,.35)');g.addColorStop(1,'rgba(40,150,80,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
   particles(t,40,'#5fe08f',.6);zLogo(W/2,H/2-30,160,P(t,14.6,.27));
-  const q=eo(P(t,15.2,.3));txt('WELCOME TO ZEMTV',W/2,H/2+100+(1-q)*10,{size:26,w:600,ls:8,c:'#e8ffe9',a:q});vignette(.7);x.restore();}
+  const q=eo(P(t,15.2,.3));txt('PART 1',W/2,H/2+100+(1-q)*10,{size:26,w:600,ls:8,c:'#e8ffe9',a:q});vignette(.7);x.restore();}
 function sMap(t){ // 17.0 - 22.6
   if(t<16.9||t>22.7)return;x.save();x.globalAlpha=P(t,16.9,.3);
   x.fillStyle='#0c1d30';x.fillRect(0,0,W,H);
@@ -152,7 +152,7 @@ function sDoc(t){ // 28.3 - 34.0
   cam(1+.07*eo(P(t,28.6,5)),W/2+20,H/2+30);
   const p=eo(P(t,28.6,.5)),pw=500,ph=600;x.save();x.translate(W/2+30+(1-p)*320,H/2+30+(1-p)*520);x.rotate(lerp(-7,-1.5,p)*Math.PI/180);x.translate(-pw/2,-ph/2);
   x.shadowColor='rgba(0,0,0,.55)';x.shadowBlur=36;x.shadowOffsetY=16;x.fillStyle='#f6f1e4';x.fillRect(0,0,pw,ph);x.shadowColor='transparent';
-  txt('ZEMTV RESEARCH FILE',38,46,{f:IN,w:700,size:11,ls:3,al:'left',c:'#b0303a'});
+  txt('RESEARCH FILE',38,46,{f:IN,w:700,size:11,ls:3,al:'left',c:'#b0303a'});
   txt('BURJ KHALIFA — KEY FACTS',38,84,{size:30,w:700,ls:1,al:'left',c:'#1d1d1d'});x.fillStyle='#1d1d1d';x.fillRect(38,110,pw-76,2);
   const rows=[['LOCATION','DUBAI, UNITED ARAB EMIRATES',29.2],['HEIGHT','828 METRES · 163 FLOORS',29.65],['OFFICIALLY OPENED','4 JANUARY 2010',30.1],['ESTIMATED COST','$1.5 BILLION (APPROX.)',30.55]];
   rows.forEach(([lab,val,t0],i)=>{const Y=160+i*82;txt(lab,38,Y,{size:15,w:600,ls:2,al:'left',c:'#8a8a8a',a:P(t,t0-.15,.2)});

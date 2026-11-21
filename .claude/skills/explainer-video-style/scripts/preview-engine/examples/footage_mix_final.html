@@ -1,0 +1,194 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}canvas{display:block}</style></head>
+<body><canvas id="c" width="1280" height="720"></canvas>
+<script src="../lib.js"></script>
+<script>const T=x=>x;</script>
+<script src="vox_scenes.js"></script>
+<script>
+// FINAL: per-line style choice. Times = tightened VO (vo_tight.wav), taken from word timestamps.
+// Kinds: G graphics over gameplay, F full-bleed footage + minimal type, W white Vox stage + live clip cards, P editorial paper + torn prints.
+const END=152;
+function stepVal(t,list){let v=null,t0=-1;for(const [ti,s] of list)if(t>=ti){v=s;t0=ti;}return [v,t0];}
+function dim(a){if(a<=0)return;x.fillStyle=`rgba(7,5,10,${a})`;x.fillRect(-60,-60,W+120,H+120);const g=x.createRadialGradient(W*.15,H*1.05,0,W*.15,H*1.05,W*.75);g.addColorStop(0,`rgba(255,63,164,${.18*a})`);g.addColorStop(1,'rgba(255,63,164,0)');x.fillStyle=g;x.fillRect(0,0,W,H);}
+function bar3d(X,base,w,h,c1,c2){if(h<=0)return;x.fillStyle=c2;x.beginPath();x.moveTo(X,base-h);x.lineTo(X+14,base-h-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.fill();
+  x.beginPath();x.moveTo(X+w,base);x.lineTo(X+w+14,base-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.globalAlpha*=.75;x.fill();x.globalAlpha/=.75;const g=x.createLinearGradient(X,0,X+w,0);g.addColorStop(0,c1);g.addColorStop(.5,c2);g.addColorStop(1,c1);x.fillStyle=g;x.fillRect(X,base-h,w,h);}
+function gcard(X,Y,w,h,col=GOLD,fill='rgba(20,12,4,.6)'){x.fillStyle=fill;x.strokeStyle=col;x.lineWidth=1.5;rr(X-w/2,Y-h/2,w,h,10);x.fill();x.stroke();}
+function strike(X1,Y,X2,p,col=RED,w=6){if(p<=0)return;x.strokeStyle=col;x.lineWidth=w;x.lineCap='round';x.beginPath();x.moveTo(X1,Y);x.lineTo(lerp(X1,X2,p),Y);x.stroke();x.lineCap='butt';}
+function head(s,t,t0,y=90,size=44,gold=false){txt(s,W/2,y,{size,w:700,ls:3,...(gold?{gold:1}:{c:'#f0f0f0',sh:14}),reveal:P(t,t0,.4)});}
+function kick(s,t,t0,y=70,col='#444'){txt(s,W/2,y,{f:IN,w:700,size:14,ls:5,c:col,a:P(t,t0,.25)});}
+function icon(kind,col='#f2f2f2'){x.strokeStyle=col;x.lineWidth=5;x.lineJoin='round';
+  if(kind==='movie'){x.strokeRect(-60,-30,120,80);x.beginPath();x.moveTo(-60,-30);x.lineTo(-56,-62);x.lineTo(64,-52);x.lineTo(60,-30);x.stroke();for(let i=0;i<4;i++){x.beginPath();x.moveTo(-40+i*30,-58+i*1.5);x.lineTo(-28+i*30,-31);x.stroke();}}
+  if(kind==='album'){x.beginPath();x.arc(0,0,62,0,7);x.stroke();x.lineWidth=1.5;for(let r=24;r<58;r+=8){x.beginPath();x.arc(0,0,r,0,7);x.stroke();}x.fillStyle=col;x.beginPath();x.arc(0,0,14,0,7);x.fill();}
+  if(kind==='book'){x.strokeRect(-50,-62,100,124);x.beginPath();x.moveTo(-34,-62);x.lineTo(-34,62);x.stroke();x.lineWidth=2;for(let i=0;i<3;i++){x.beginPath();x.moveTo(-18,-30+i*18);x.lineTo(34,-30+i*18);x.stroke();}}}
+function person(s,col){x.save();x.scale(s,s);x.fillStyle=col;x.beginPath();x.arc(0,-110,34,0,7);x.fill();rr(-48,-68,96,130,30);x.fill();x.fillRect(-40,50,30,90);x.fillRect(10,50,30,90);x.restore();}
+function flagPK(){x.fillStyle='#fff';x.fillRect(-120,-80,60,160);x.fillStyle='#01411c';x.fillRect(-60,-80,180,160);x.fillStyle='#fff';x.beginPath();x.arc(30,0,48,0,7);x.fill();x.fillStyle='#01411c';x.beginPath();x.arc(46,-14,42,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();for(let i=0;i<10;i++){const r=i%2?7:17,a=-Math.PI/2+i*Math.PI/5+.6;x.lineTo(62+Math.cos(a)*r,-22+Math.sin(a)*r);}x.closePath();x.fill();}
+function flagIN(){['#FF9933','#ffffff','#138808'].forEach((c,i)=>{x.fillStyle=c;x.fillRect(-120,-80+i*53.4,240,54);});x.strokeStyle='#000080';x.lineWidth=2.5;x.beginPath();x.arc(0,0,22,0,7);x.stroke();for(let i=0;i<24;i++){const a=i*Math.PI/12;x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(a)*22,Math.sin(a)*22);x.lineWidth=1;x.stroke();}}
+function wcard(X,Y,w,h){x.save();x.shadowColor='rgba(0,0,0,.22)';x.shadowBlur=20;x.shadowOffsetY=8;x.fillStyle='#fff';rr(X-w/2,Y-h/2,w,h,12);x.fill();x.restore();}
+function seqStill(name,i=45){return SEQ[name][i];}
+
+// ===== L1 G — 19 Nov, midnight (0-2.8)
+function L1(t){dim(.45);txt('19 NOVEMBER 2026',W/2,170,{size:58,gold:1,ls:4,reveal:P(t,0.05,.5)});
+  const [v,t0]=stepVal(t,[[0.8,'11:59:57'],[1.4,'11:59:58'],[1.95,'11:59:59'],[2.38,'12:00:00']]);
+  if(v){const b=(t-t0<.14)?1.05:1,mid=v==='12:00:00';x.save();x.translate(W/2,385);x.scale(b,b);txt(v,0,0,mid?{size:170,gold:1,ls:6,glow:44}:{size:170,c:'#e6e6e6',ls:6,sh:20,a:P(t,.7,.15)});x.restore();}}
+// ===== L2 W — millions of screens: wall of live clips (2.8-5.48)
+const WALL=['trailer','boat','club','beach','launchc','jet','flam','heli','gen1','gen2','gen3','gta6'];
+function L2(t){stageW();navy('MILLIONS OF SCREENS · ONE MOMENT',W/2,80,38,P(t,2.9,.25));
+  WALL.forEach((k,i)=>{const c=i%4,r=Math.floor(i/4),X=250+c*260,Y=210+r*170,ti=3.6+i*.07;const p=back(P(t,ti,.25));if(p<=0)return;x.save();x.translate(X,Y);x.scale(p,p);
+    x.shadowColor='rgba(0,0,0,.25)';x.shadowBlur=14;x.shadowOffsetY=6;x.fillStyle='#fff';x.fillRect(-114,-66,228,132);x.shadowColor='transparent';cover(seqFrame(k,t,3.5,{loop:true,offset:i*7}),-108,-60,216,120);x.restore();});}
+// ===== L3 P — day off (5.48-7.2)
+function L3(t){paperW();kick('SOME TOOK THE DAY OFF',t,5.5,80);const p=eo(P(t,5.6,.35));x.save();x.translate(W/2,380+(1-p)*80);x.globalAlpha*=p;x.rotate(-2*Math.PI/180);x.shadowColor='rgba(0,0,0,.3)';x.shadowBlur=24;x.fillStyle='#fbfaf6';rr(-120,-140,240,280,14);x.fill();x.shadowBlur=0;
+  x.fillStyle='#d7261e';x.beginPath();x.roundRect(-120,-140,240,60,[14,14,0,0]);x.fill();txt('NOVEMBER 2026',0,-110,{size:22,w:700,ls:3,c:'#fff'});txt('19',0,10,{size:130,w:700,c:'#1d1d1d'});txt('THURSDAY',0,105,{f:IN,w:700,size:14,ls:5,c:'#8a8a8a'});
+  const cp=eo(P(t,6.1,.4));if(cp>0){x.strokeStyle='#d7261e';x.lineWidth=5;x.beginPath();x.ellipse(0,12,92,74,-.1,-1.8,-1.8+cp*Math.PI*2.1);x.stroke();}x.restore();stickerW('OFFICE? NOT TODAY',W/2+250,470,6.55,t,-8);}
+// ===== L4 G — all night download (7.2-10.78)
+function L4(t){dim(.5);txt('03:47 AM',W/2,180,{size:46,w:700,ls:4,c:'#e8e8e8',sh:12,a:P(t,7.85,.3)});const pr=cl(Math.pow(P(t,9.2,.85),.85)),done=pr>=1;const X=W/2-330,Y=330,BW=660;
+  x.fillStyle='rgba(0,0,0,.45)';x.strokeStyle='rgba(255,255,255,.18)';rr(X-30,Y-60,BW+60,190,10);x.fill();x.stroke();txt(done?'DOWNLOAD COMPLETE ✓':'DOWNLOADING…',X,Y,{size:30,w:700,ls:3,al:'left',c:done?'#3ddc84':'#eee'});
+  txt(Math.floor(pr*100)+'%',X+BW,Y,{size:46,w:700,al:'right',...(done?{c:'#3ddc84'}:{gold:1,glow:14})});x.fillStyle='rgba(255,255,255,.12)';rr(X,Y+50,BW,16,8);x.fill();const g=x.createLinearGradient(X,0,X+BW,0);g.addColorStop(0,done?'#2fbf63':'#b8862b');g.addColorStop(1,done?'#3ddc84':'#fff1b8');x.fillStyle=g;if(pr>0){rr(X,Y+50,BW*pr,16,8);x.fill();}
+  lowerThird('STAYED UP ALL NIGHT',70,H-70,P(t,7.9,.3),GOLD);}
+// ===== L5 W — 13 years of waiting (10.78-15.3)
+function L5(t){stageW();navy('SOME HAD WAITED',W/2,80,36,P(t,10.9,.25));clipCard('gen1',t,11.3,300,330,380,214,-3,-1,'GTA V · 2013');clipCard('gta6',t,12.6,980,330,380,214,3,1,'GTA VI · 2026');
+  dimLine(300,520,980,520,P(t,12.9,.55));popAt(t,13.48,W/2,560,()=>{wcard(0,0,260,80);txt('13 YEARS',0,2,{size:50,w:700,ls:3,c:NAVY});});x.save();x.globalAlpha*=P(t,14.3,.25);hlSerif('','for this moment','',W/2,650,28,P(t,14.4,.35));x.restore();}
+// ===== L6 G — one video game (15.3-17.1)
+function L6(t){dim(.5);const p=eo(P(t,15.9,.45));x.save();x.translate(W/2,330);const s=lerp(1.35,1,p);x.scale(s,s);txt('VI',0,0,{size:300,gold:1,ls:4,glow:70,a:p});x.restore();txt('ALL FOR ONE VIDEO GAME',W/2,580,{size:30,w:600,ls:10,c:'#fff',sh:14,a:P(t,16.1,.3)});}
+// ===== L7 P — budget bigger than Hollywood (17.1-21.55)
+function L7(t){paperW();kick('ESTIMATED BUDGETS',t,17.2,70);x.save();x.globalAlpha*=P(t,17.3,.25);hlSerif('Bigger than ','Hollywood','?',W/2,118,40,P(t,18.8,.35));x.restore();
+  [['AVATAR: THE WAY OF WATER','$350M+',.18,18.9,'#1d1d1d'],['AVENGERS: ENDGAME','$356M',.18,19.25,'#1d1d1d'],['GTA VI','$1B – $2B?',1.0,19.85,'#d7261e']].forEach(([l,v,f,t0,col],i)=>{const Y=240+i*110,w=620*f*eo(P(t,t0,.5));
+    if(w>2){x.fillStyle=col;tornRect(400,Y-34,w,68,i*13+3,7);x.fill();}txt(l,380,Y,{size:21,w:700,al:'right',c:'#1d1d1d',a:P(t,t0,.2)});txt(v,400+w+16,Y,{size:30,w:700,al:'left',c:col,a:P(t,t0+.35,.2)});});
+  stickerW('REPORTED · UNCONFIRMED',1040,560,20.5,t,-6);txt('Film budgets as reported; GTA VI budget never officially disclosed',W/2,650,{f:IN,w:500,size:12,c:'#777',a:P(t,20.6,.3)});}
+// ===== L8 G — hacked & leaked (21.55-26.25)
+function L8(t){dim(.68);head('SEPTEMBER 2022 · 4 YEARS BEFORE RELEASE',t,21.7,86,34);const hub=[W/2,360];
+  for(let i=0;i<16;i++){const nx=160+rnd(i)*960,ny=170+rnd(i+20)*360,p=eo(P(t,22.3+i*.05,.35));x.strokeStyle='rgba(224,40,60,.7)';x.lineWidth=1.2;x.beginPath();x.moveTo(...hub);x.lineTo(lerp(hub[0],nx,p),lerp(hub[1],ny,p));x.stroke();if(p>=1){x.fillStyle='#ff4060';x.beginPath();x.arc(nx,ny,4,0,7);x.fill();}}
+  popAt(t,23.84,W/2,350,()=>{gcard(0,0,420,110,RED,'rgba(30,4,8,.75)');txt('AN 18-YEAR-OLD',0,-14,{size:44,w:700,ls:3,c:'#fff'});txt('HACKER · AS REPORTED',0,30,{f:IN,w:700,size:13,ls:4,c:'#ff8090'});});
+  stamp('HACKED',W/2-260,560,24.94,t,RED,-8,46);stamp('LEAKED',W/2+260,560,25.36,t,RED,6,46);}
+// ===== L9 W — the trailer broke YouTube records (26.25-28.5)
+function L9(t){stageW();const p=eo(P(t,26.35,.4));x.save();x.translate(W/2-120,360+(1-p)*400);x.shadowColor='rgba(0,0,0,.25)';x.shadowBlur=24;x.shadowOffsetY=10;x.fillStyle='#fff';rr(-330,-215,660,430,14);x.fill();x.shadowColor='transparent';
+  cover(seqFrame('trailer',t,26.3,{loop:true}),-312,-197,624,351);x.fillStyle='#e6e6e6';x.fillRect(-312,170,624,6);x.fillStyle='#d7261e';x.fillRect(-312,170,624*P(t,26.3,2.2),6);txt('GTA VI · TRAILER 1',-312,196,{f:IN,w:800,size:14,al:'left',c:'#1d1d1d'});x.restore();
+  const [v,t0]=stepVal(t,[[26.9,'30M'],[27.15,'50M'],[27.4,'65M'],[27.6,'78M'],[27.8,'90M+']]);if(v){const b=(t-t0<.12)?1.08:1;x.save();x.translate(1050,300);x.scale(b,b);txt(v,0,0,{size:96,w:700,c:NAVY});x.restore();}
+  txt('VIEWS IN 24 HOURS',1050,370,{f:IN,w:800,size:14,ls:3,c:'#555',a:P(t,27.4,.25)});stickerW('YOUTUBE RECORD',1050,450,27.68,t,-7);}
+// ===== L10 G — paid for itself? (28.5-34.2)
+function L10(t){dim(.62);head('BEFORE LAUNCH DAY',t,28.9,86,40);const fill=P(t,31.4,2.0),ang=lerp(14,-1,eo(fill))*Math.PI/180,px=W/2,py=260,L=290;
+  x.fillStyle='rgba(245,199,102,.12)';x.strokeStyle=GOLD;x.lineWidth=2;x.beginPath();x.moveTo(px,py);x.lineTo(px-45,py+260);x.lineTo(px+45,py+260);x.closePath();x.fill();x.stroke();
+  const lx=px-Math.cos(ang)*L,ly=py+Math.sin(ang)*L,rx=px+Math.cos(ang)*L,ry=py-Math.sin(ang)*L;x.lineWidth=4;x.beginPath();x.moveTo(lx,ly);x.lineTo(rx,ry);x.stroke();
+  const pan=(X,Y)=>{x.lineWidth=1.5;x.beginPath();x.moveTo(X,Y);x.lineTo(X-60,Y+110);x.moveTo(X,Y);x.lineTo(X+60,Y+110);x.stroke();x.beginPath();x.moveTo(X-75,Y+110);x.quadraticCurveTo(X,Y+150,X+75,Y+110);x.closePath();x.fillStyle='rgba(245,199,102,.15)';x.fill();x.stroke();};pan(lx,ly);pan(rx,ry);
+  x.save();x.globalAlpha*=P(t,29.2,.3);bar3d(lx-45,ly+112,80,70,'#9a6c1c','#f5c766');x.restore();
+  for(let i=0;i<24;i++){const q=P(t,31.36+i*.07,.2);if(q<=0)continue;const cx=rx-50+(i%6)*20,cy=ry+104-Math.floor(i/6)*11,dy=(1-eo(q))*-160;x.fillStyle='#f5c766';x.strokeStyle='#9a6c1c';x.lineWidth=1;x.beginPath();x.ellipse(cx,cy+dy,10,5,0,0,7);x.fill();x.stroke();}
+  tag('DEVELOPMENT BUDGET',lx,ly+190,GOLD,P(t,29.2,.3));tag('PRE-LAUNCH SALES',rx,ry+190,'#3ddc84',P(t,31.3,.3));txt('PAID FOR ITSELF?',W/2,630,{size:50,w:700,ls:3,c:'#fff',sh:14,a:P(t,32.86,.3)});tag('SPECULATION · NO OFFICIAL FIGURES',W/2,676,RED,P(t,33.4,.25));}
+// ===== L11 P — where did the billions go? (34.2-37.75)
+function L11(t){paperW();kick('THE FIRST QUESTION',t,34.3,90);x.save();x.globalAlpha*=P(t,34.7,.25);hlSerif('Where did Rockstar put ','billions of dollars','?',W/2,200,40,P(t,36.6,.4));x.restore();
+  popAt(t,36.64,W/2,400,()=>{x.rotate(-.04);x.fillStyle='#1d1d1d';tornRect(-230,-90,460,180,9,9);x.fill();txt('$ ? ? ?',0,4,{size:110,w:700,ls:10,c:'#efebe3'});});}
+// ===== L12 G — why 13 years? (37.75-39.3)
+function L12(t){dim(.5);popAt(t,38.2,W/2,300,()=>txt('13',0,0,{size:240,gold:1,glow:60}));txt('WHY DID IT TAKE 13 YEARS?',W/2,470,{size:46,w:700,ls:4,c:'#fff',sh:14,reveal:P(t,38.4,.4)});}
+// ===== L13 W — the story most people don't know (39.3-45.1)
+function L13(t){stageW();navy("THE STORY MOST PEOPLE DON'T KNOW",W/2,90,40,P(t,42.0,.3));
+  [['guin','01','THE BUDGET'],['club','02','THE LEAK'],['trailer','03','THE TRAILER'],['launchc','04','THE BUSINESS']].forEach(([k,n,l],i)=>{const X=200+i*293;clipCard(k,t,40.8+i*.35,X,340,250,141,[-3,2,-2,3][i],1);
+    txt(n,X,460,{size:44,w:700,c:NAVY,a:P(t,41.1+i*.35,.25)});txt(l,X,505,{f:IN,w:800,size:14,ls:3,c:'#555',a:P(t,41.2+i*.35,.25)});});
+  if(t>44.1){x.save();x.globalAlpha*=P(t,44.16,.25);hlSerif('Most people ','don\'t know',' this',W/2,610,30,P(t,44.6,.35));x.restore();}}
+// ===== L14 G — only for gamers in India & Pakistan (45.1-51.95)
+function L14(t){dim(.55);head('ONE LAST THING — ONLY FOR GAMERS IN',t,45.3,120,30);for(const [fn,X,t0,l] of [[flagIN,W/2-200,46.72,'INDIA'],[flagPK,W/2+200,47.2,'PAKISTAN']]){popAt(t,t0,X,320,()=>{x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=24;x.fillStyle='#000';x.fillRect(-120,-80,240,160);x.shadowBlur=0;fn();});txt(l,X,440,{size:28,w:700,ls:6,c:'#fff',sh:10,a:P(t,t0+.2,.3)});}
+  txt('YOU MIGHT NOT LIKE IT',W/2,530,{size:30,w:700,ls:6,c:RED,sh:10,a:P(t,49.6,.3)});stamp('WATCH TILL THE END',W/2,610,50.88,t,GOLD,-4,34);}
+// ===== L15 G — rewind to 2013 (51.95-55.15)
+function L15(t){dim(.5);txt('TO UNDERSTAND GTA VI…',W/2,190,{size:30,w:600,ls:6,c:'#fff',sh:10,a:P(t,52.0,.3)});const p=eoX(P(t,52.6,1.45));const y=Math.round(lerp(2026,2013,p));const b=(t>54.06&&t<54.2)?1.06:1;
+  x.save();x.translate(W/2,370);x.scale(b,b);txt(String(y),0,0,{size:220,gold:1,ls:6,glow:54});x.restore();const rw=P(t,52.6,.15)*(1-P(t,53.9,.3));if(rw>0)txt('◀◀ REWIND',W/2,510,{size:28,w:700,ls:6,c:'#fff',a:rw});}
+// ===== L16 F — 17 Sept 2013, GTA V launches (55.15-58.45)
+function L16(t){dim(.2);const p=eo(P(t,55.25,.35));x.save();x.globalAlpha*=p;x.translate(W/2,220);gcard(0,0,620,120,GOLD,'rgba(20,12,4,.65)');txt('RELEASE DATE',0,-34,{f:IN,w:700,size:11,ls:4,c:GOLD});txt('17 SEPTEMBER 2013',0,12,{size:58,gold:1,ls:3,glow:16});x.restore();
+  popAt(t,57.18,W/2,430,()=>txt('GTA V',0,0,{size:130,gold:1,ls:4,glow:44}));txt('LAUNCHES',W/2,530,{size:28,w:600,ls:10,c:'#fff',sh:12,a:P(t,57.82,.25)});}
+// ===== L17 F — never happened before (58.45-61.25)
+function L17(t){dim(.1);x.fillStyle='rgba(0,0,0,.35)';x.fillRect(0,0,W,140);txt('GAMING HAD NEVER SEEN THIS',W/2,80,{size:42,gold:1,ls:3,reveal:P(t,59.3,.45)});}
+// ===== L18 W — 11.2 million copies in 24 hours (61.25-64.65)
+function L18(t){stageW();navy('IN JUST 24 HOURS',W/2,90,40,P(t,61.36,.25));clipCard('gen1',t,61.5,300,350,360,203,-3,-1,'GTA V · DAY ONE');
+  const v=Math.round(11210000*eoX(P(t,62.0,1.3)));txt(v.toLocaleString('en-US'),860,300,{size:86,w:700,c:NAVY,a:P(t,61.96,.2)});txt('COPIES SOLD',860,365,{f:IN,w:800,size:16,ls:4,c:'#555',a:P(t,63.0,.25)});
+  for(let i=0;i<30;i++){const q=P(t,62.2+i*.05,.15);if(q<=0)continue;x.fillStyle=i%3?'#1f2f55':'#d7a800';x.globalAlpha=q;x.fillRect(700+(i%10)*32,420+Math.floor(i/10)*40,24,32);x.globalAlpha=1;}
+  x.save();x.globalAlpha*=P(t,63.06,.25);hlSerif('','1 crore 12 lakh',' copies',860,580,30,P(t,63.1,.35));x.restore();}
+// ===== L19 G — $1 billion in 3 days (64.65-67.15)
+function L19(t){dim(.55);tag('3 DAYS',W/2,200,GOLD,P(t,65.08,.25),16);const m=Math.round(1e9*eoX(P(t,65.4,1.1)));txt('$'+m.toLocaleString('en-US'),W/2,330,{size:100,gold:1,ls:2,glow:36,a:P(t,65.3,.2)});txt('1 ARAB DOLLAR · REVENUE',W/2,420,{size:26,w:600,ls:5,c:'#fff',sh:10,a:P(t,66.6,.3)});}
+// ===== L20 P — no film, album or book (67.15-73.05)
+function L20(t){paperW();kick('BACK IN 2013, NO…',t,67.2,90);[['movie','FILM',68.7],['album','ALBUM',69.48],['book','BOOK',70.54]].forEach(([k,l,t0],i)=>{const X=W/2+(i-1)*320;popAt(t,t0,X,320,()=>icon(k,'#1d1d1d'));txt(l,X,440,{size:28,w:700,ls:6,c:'#1d1d1d',a:P(t,t0+.15,.3)});strike(X-110,320,X+110,eo(P(t,72.2+i*.1,.25)),'#d7261e',7);});
+  x.save();x.globalAlpha*=P(t,70.9,.3);hlSerif('could earn ','this much, this fast','',W/2,580,32,P(t,71.2,.5));x.restore();}
+// ===== L21 P — Guinness record (73.05-78.2)
+function L21(t){paperW();kick('GUINNESS WORLD RECORDS',t,73.12,70);const p=eo(P(t,73.3,.45));x.save();x.translate(470,385+(1-p)*500);x.rotate(lerp(-4,-1.5,p)*Math.PI/180);x.scale(.82,.82);x.shadowColor='rgba(0,0,0,.4)';x.shadowBlur=36;x.shadowOffsetY=14;x.fillStyle='#f9f4e4';x.fillRect(-330,-210,660,420);x.shadowColor='transparent';
+  x.strokeStyle='#b8862b';x.lineWidth=4;x.strokeRect(-310,-190,620,380);x.lineWidth=1.2;x.strokeRect(-298,-178,596,356);txt('GUINNESS WORLD RECORDS · 2013',0,-140,{f:IN,w:700,size:13,ls:4,c:'#8a6420'});
+  [['FASTEST-SELLING',75.78],['ENTERTAINMENT PRODUCT',76.4],['IN HISTORY',77.0]].forEach(([s,t0],i)=>txt(s,0,-70+i*58,{size:i===1?46:40,w:700,ls:2,c:'#1d1d1d',reveal:P(t,t0,.4)}));txt('AWARDED TO · GTA V',0,130,{f:IN,w:700,size:14,ls:4,c:'#555',a:P(t,77.2,.3)});
+  popAt(t,77.58,240,120,()=>{const g=x.createRadialGradient(-10,-10,4,0,0,52);g.addColorStop(0,'#fff1b8');g.addColorStop(1,'#a8781f');x.fillStyle=g;x.beginPath();for(let i=0;i<24;i++){const r=i%2?46:52,a=i*Math.PI/12;x.lineTo(Math.cos(a)*r,Math.sin(a)*r);}x.closePath();x.fill();txt('★',0,2,{size:40,w:700,c:'#7a5410'});});x.restore();
+  clipCard('guin',t,73.8,1000,360,380,214,4,1,null);txt('GTA V · LOS SANTOS',1000,505,{f:IN,w:700,size:13,ls:3,c:'#555',a:P(t,74.2,.3)});}
+// ===== L22 G — the real story began after (78.2-80.8)
+function L22(t){dim(.45);txt('BUT THE REAL STORY',W/2,300,{size:64,w:700,ls:4,c:'#fff',sh:16,reveal:P(t,78.3,.45)});txt('BEGAN AFTER THAT',W/2,390,{size:64,gold:1,ls:4,reveal:P(t,79.5,.45)});}
+// ===== L23 W — PS3/360 -> PS4 -> PC -> PS5 (80.8-87.45)
+function L23(t){stageW();navy('GTA V, AGAIN AND AGAIN',W/2,90,40,P(t,80.88,.3));const cards=[['gen1',250,82.24,'2013','PS3 · XBOX 360'],['gen2',640,85.06,'2014','PS4 · XBOX ONE'],['gen3',1030,86.66,'2022','PS5 · XBOX SERIES X|S']];
+  dimLine(250,330,640,330,P(t,84.8,.4),'#c9a400');dimLine(640,330,1030,330,P(t,86.4,.4),'#c9a400');
+  cards.forEach(([k,X,t0,a,b],i)=>{clipCard(k,t,t0,X,320,330,186,[-3,2,-2][i],1);txt(a,X,450,{size:28,w:700,ls:3,c:NAVY,a:P(t,t0+.25,.25)});txt(b,X,484,{f:IN,w:700,size:14,ls:3,c:'#555',a:P(t,t0+.3,.25)});});
+  popAt(t,85.86,780,215,()=>{x.rotate(.08);x.fillStyle=NAVY;rr(-62,-20,124,40,6);x.fill();txt('+ PC · 2015',0,1,{f:IN,w:800,size:13,ls:2,c:'#fff'});});}
+// ===== L24 G — 3 console generations (87.45-92.25)
+function L24(t){dim(.5);popAt(t,89.38,W/2,300,()=>txt('3',0,0,{size:240,gold:1,glow:60}));txt('CONSOLE GENERATIONS',W/2,440,{size:56,w:700,ls:5,c:'#fff',sh:14,reveal:P(t,89.76,.4)});txt('ONE GAME · SOLD AGAIN AND AGAIN',W/2,515,{size:26,gold:1,ls:5,reveal:P(t,91.08,.5)});}
+// ===== L25 P — only Minecraft sold more (92.25-96.35)
+function L25(t){paperW();kick('BEST-SELLING GAMES OF ALL TIME',t,92.36,100);
+  [['#1',t>95.78?'MINECRAFT':'???','300M+',1.0,93.9,'#1f8a3c'],['#2','GTA V','215M+',.72,93.34,'#1d1d1d']].forEach(([r,n,v,f,t0,col],i)=>{const Y=250+i*120,w=560*f*eo(P(t,t0,.45));if(w>2){x.fillStyle=col;tornRect(220,Y-38,w,76,i*19+5,7);x.fill();}
+    txt(r,200,Y,{size:40,w:700,al:'right',c:'#1d1d1d'});const nb=(i===0&&t>95.78&&t<95.92)?1.12:1;x.save();x.translate(240,Y+2);x.scale(nb,nb);txt(n,0,0,{size:34,w:700,ls:3,al:'left',c:'#fff',a:P(t,t0+.2,.2)});x.restore();txt(v,220+w+16,Y,{size:32,w:700,al:'left',c:col,a:P(t,t0+.35,.2)});});
+  stickerW('#1 OF ALL TIME',700,170,95.8,t,-7,'#1f8a3c');txt('Lifetime sales as reported by publishers',520,470,{f:IN,w:500,size:12,c:'#777',a:P(t,94.2,.3)});clipCard('mc',t,92.6,1080,480,280,158,4,1,null);}
+// ===== L26 F — and then came GTA Online (96.35-98.7)
+function L26(t){dim(.25);popAt(t,97.64,W/2,330,()=>txt('GTA ONLINE',0,0,{size:140,gold:1,ls:5,glow:50}));txt('AND THEN CAME…',W/2,210,{size:30,w:600,ls:8,c:'#fff',sh:12,a:P(t,96.9,.25)});}
+// ===== L27 W — real money for virtual money (98.7-102.85)
+function L27(t){stageW();navy('REAL MONEY → GAME MONEY',W/2,90,40,P(t,98.8,.25));
+  popAt(t,99.28,280,330,()=>{wcard(0,0,260,190);txt('$',0,-20,{size:80,w:700,c:'#1f8a3c'});txt('REAL MONEY',0,58,{size:24,w:700,ls:3,c:NAVY});});
+  const ap=eo(P(t,99.9,.4));if(ap>0){x.strokeStyle=NAVY;x.lineWidth=4;x.beginPath();x.moveTo(430,330);x.lineTo(430+300*ap,330);x.stroke();if(ap>.95){x.fillStyle=NAVY;x.beginPath();x.moveTo(746,330);x.lineTo(726,318);x.lineTo(726,342);x.fill();}}
+  clipCard('online',t,100.08,960,330,360,202,3,1,'GTA$ · IN-GAME CASH');
+  for(let i=0;i<3;i++){const q=eo(P(t,101.56+i*.1,.3));if(q<=0)continue;x.save();x.translate(640+(i-1)*95*q,570);x.rotate((i-1)*.15*q);x.globalAlpha*=q;x.shadowColor='rgba(0,0,0,.3)';x.shadowBlur=12;const g=x.createLinearGradient(-75,-42,75,42);g.addColorStop(0,['#1a6fd1','#7a2bd1','#d1a21a'][i]);g.addColorStop(1,'#111');x.fillStyle=g;rr(-75,-42,150,84,10);x.fill();x.shadowBlur=0;txt('SHARK CARD',0,1,{f:IN,w:800,size:13,ls:2,c:'#fff'});x.restore();}}
+// ===== L28 G — ~$500M a year, 13 years later (102.85-108.15)
+function L28(t){dim(.6);head('13 YEARS LATER',t,105.4,100,44);const base=470;for(let i=0;i<13;i++){const X=190+i*72,q=eo(P(t,103.2+i*.15,.3));bar3d(X,base,44,(150+rnd(i+70)*40)*q,'#9a6c1c','#f5c766');txt(String(2014+i).slice(2),X+22,base+24,{f:IN,w:600,size:13,c:'#ccc',a:q});}
+  popAt(t,106.8,W/2,230,()=>txt('~$500M / YEAR',0,0,{size:72,gold:1,ls:3,glow:30}));txt('≈ 50 CRORE DOLLAR · EVERY YEAR',W/2,560,{size:26,w:600,ls:5,c:'#fff',a:P(t,107.2,.3)});tag('AS REPORTED · ESTIMATE',W/2,610,RED,P(t,107.6,.25));}
+// ===== L29 F — now think about it (108.15-109.85)
+function L29(t){dim(.4);txt('NOW THINK ABOUT IT…',W/2,H/2,{size:66,w:700,ls:5,c:'#fff',sh:16,reveal:P(t,108.25,.5)});}
+// ===== L30 W — your last game was #1 (109.85-113.7)
+function L30(t){stageW();navy('YOUR LAST GAME WAS…',W/2,90,38,P(t,110.0,.25));[[300,150,'#2'],[640,230,'#1'],[980,110,'#3']].forEach(([X,h,l],i)=>{const q=eo(P(t,110.4+i*.12,.35));x.fillStyle=i===1?'#1f2f55':'#c9ccd2';x.fillRect(X-120,660-h*q*.8,240,h*q*.8);txt(l,X,660-h*q*.8+34,{size:34,w:700,c:'#fff',a:q});});
+  clipCard('gen2',t,110.8,640,265,320,180,0,0,null);stickerW('MOST SUCCESSFUL ENTERTAINMENT PRODUCT',640,395,112.06,t,-3,'#d7261e',18);}
+// ===== L31 G — pressure (113.7-116.9)
+function L31(t){dim(.55);head('MAKING THE NEXT ONE',t,114.4,110,40);const cx=W/2,cy=470,R=190;x.lineWidth=28;for(let i=0;i<30;i++){const a0=Math.PI+i*Math.PI/30;x.strokeStyle=`hsl(${lerp(45,0,i/29)},85%,${lerp(60,48,i/29)}%)`;x.beginPath();x.arc(cx,cy,R,a0,a0+Math.PI/30+.01);x.stroke();}
+  const nv=eo(P(t,114.9,1.2))*.97+.03*Math.sin(t*30)*P(t,116.0,.1);const na=Math.PI+nv*Math.PI;x.strokeStyle='#fff';x.lineWidth=5;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(na)*(R-30),cy+Math.sin(na)*(R-30));x.stroke();x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,12,0,7);x.fill();
+  txt('PRESSURE',cx,cy+70,{size:44,w:700,ls:8,c:RED,a:P(t,116.08,.2)});}
+// ===== L32 P — no room for mistakes (116.9-119.8)
+function L32(t){paperW();kick('ROCKSTAR HAD',t,117.0,170);x.save();x.globalAlpha*=P(t,117.3,.25);x.font=`italic 700 64px ${SERIF}`;x.fillStyle='#1d1d1d';x.textAlign='center';x.textBaseline='middle';x.fillText('no room for mistakes.',W/2,300);x.restore();
+  const sp=eo(P(t,117.72,.35));if(sp>0){x.save();x.globalCompositeOperation='multiply';x.fillStyle='#ffe14d';x.fillRect(W/2-300,270,600*sp,62);x.restore();}stickerW('ZERO ERRORS ALLOWED',W/2,450,118.68,t,-5,'#d7261e',30);}
+// ===== L33 G — it stretched so long (119.8-121.6)
+function L33(t){dim(.55);const st=eo(P(t,120.4,1.0));const w=lerp(220,880,st)+Math.sin(P(t,120.4,1.0)*Math.PI*3)*30*(1-P(t,121.2,.3));const X0=W/2-440;x.fillStyle='rgba(245,199,102,.2)';x.strokeStyle=GOLD;x.lineWidth=2;rr(X0,400,w,44,22);x.fill();x.stroke();
+  txt('2013',X0,470,{f:IN,w:700,size:16,c:'#fff'});txt('2026',X0+w,470,{f:IN,w:700,size:16,c:'#fff',a:P(t,121.0,.2)});txt("THAT'S WHY IT TOOK SO LONG",W/2,260,{size:44,gold:1,ls:4,reveal:P(t,119.9,.45)});}
+// ===== L34 W — 13 years between two games (121.6-125.55)
+function L34(t){stageW();navy('BETWEEN TWO GAMES',W/2,90,38,P(t,121.7,.25));clipCard('v5',t,121.68,340,330,440,248,-3,-1,'GTA V · 2013');clipCard('v6',t,122.86,940,330,440,248,3,1,'GTA VI · 2026');
+  dimLine(340,560,940,560,P(t,123.4,.5));popAt(t,123.94,W/2,610,()=>{wcard(0,0,260,70);txt('13 YEARS',0,2,{size:44,w:700,ls:3,c:NAVY});});}
+// ===== L35 P — the kid was 10, now 23 (125.55-129.35)
+function L35(t){paperW();kick('THE KID WHO WAITED',t,125.6,90);x.save();x.translate(W/2-230,560);x.globalAlpha*=P(t,125.74,.25);person(.6,'#9a9488');x.restore();popAt(t,126.8,W/2-230,250,()=>txt('10',0,0,{size:110,w:700,c:'#1d1d1d'}));txt('in 2013',W/2-230,330,{f:SERIF,w:400,size:26,c:'#444',a:P(t,127.0,.3)});
+  const ap=eo(P(t,127.5,.4));if(ap>0)strike(W/2-100,420,W/2+100,ap,'#1d1d1d',3);popAt(t,128.0,W/2+230,560,()=>person(1.0,'#d7261e'),.3);popAt(t,128.26,W/2+230,250,()=>txt('23',0,0,{size:110,w:700,c:'#d7261e'}));txt('today',W/2+230,330,{f:SERIF,w:400,size:26,c:'#444',a:P(t,128.5,.3)});}
+// ===== L36 G — buying it with the first salary (129.35-133.05)
+function L36(t){dim(.35);const p=eo(P(t,130.4,.4));x.save();x.translate(380,370+(1-p)*500);x.rotate(-.04);x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=30;x.fillStyle='#f4f1ea';x.fillRect(-180,-200,360,400);x.shadowColor='transparent';
+  txt('PAYSLIP',-150,-162,{f:IN,w:800,size:13,ls:4,al:'left',c:'#b0303a'});txt('FIRST SALARY',-150,-122,{size:34,w:700,al:'left',c:'#1d1d1d',reveal:P(t,130.7,.35)});x.fillStyle='#1d1d1d';x.fillRect(-150,-95,300,2);
+  for(let i=0;i<4;i++){x.fillStyle='rgba(40,40,40,.45)';x.fillRect(-150,-60+i*34,170+rnd(i+90)*100,8);}txt('CREDITED ✓',-150,130,{size:30,w:700,al:'left',c:'#1a8f2a',a:P(t,131.14,.3)});x.restore();
+  popAt(t,131.62,960,340,()=>{x.save();x.shadowColor='rgba(245,199,102,.5)';x.shadowBlur=40;gcard(0,0,300,200,GOLD,'rgba(10,6,4,.7)');x.restore();txt('GTA VI',0,0,{size:96,gold:1,ls:3,glow:30});});stamp('PURCHASED',960,460,132.14,t,'#3ddc84',-8,32);}
+// ===== L37 F — Rockstar wasn't silent (133.05-134.85)
+function L37(t){dim(.3);txt("ROCKSTAR WASN'T SILENT",W/2,H/2,{size:58,w:700,ls:5,c:'#fff',sh:18,reveal:P(t,133.2,.45)});}
+// ===== L38 G — 2018 RDR2 (134.85-142.1)
+function L38(t){dim(.22);popAt(t,134.92,W/2,250,()=>txt('2018',0,0,{size:110,gold:1,ls:6,glow:40}));txt('RED DEAD REDEMPTION 2',W/2,360,{size:56,w:700,ls:4,c:'#fff',sh:16,reveal:P(t,136.6,.45)});
+  lowerThird('ONE OF THE MOST DETAILED OPEN WORLDS EVER MADE',70,H-70,P(t,140.06,.3),GOLD);}
+// ===== L39 P — it was practice (142.1-144.65)
+function L39(t){paperW();tornPrint(seqStill('rdr',40),380,380,480,300,-3,P(t,142.2,.35),17,'grayscale(1) contrast(1.3)');txt('RDR2 · 2018',380,560,{f:IN,w:700,size:13,ls:3,c:'#555',a:P(t,142.5,.3)});
+  x.save();x.globalAlpha*=P(t,142.6,.25);x.font=`italic 400 40px ${SERIF}`;x.fillStyle='#1d1d1d';x.textAlign='left';x.textBaseline='middle';x.fillText('It was, in a way,',700,300);x.restore();
+  const sp=eo(P(t,143.82,.3));x.save();x.globalAlpha*=P(t,143.8,.1);x.fillStyle='#ffe14d';x.fillRect(696,345,330*sp,80);x.font=`italic 700 72px ${SERIF}`;x.fillStyle='#1d1d1d';x.textAlign='left';x.fillText('practice.',710,388);x.restore();}
+// ===== L40 W — technology, physics, characters -> foundation of GTA VI (144.65-149.6)
+function L40(t){stageW();clipCard('rdr',t,144.7,300,350,380,214,-3,-1,'RDR2 · 2018');
+  [['TECHNOLOGY',144.96,250],['PHYSICS',145.76,345],['REAL CHARACTERS',146.5,440]].forEach(([s,t0,Y])=>{const p=eo(P(t,t0,.25));if(p<=0)return;x.strokeStyle='#c9a400';x.lineWidth=2;x.beginPath();x.moveTo(500,350);x.lineTo(lerp(500,530,p),Y);x.stroke();
+    x.save();x.globalAlpha*=p;x.translate(640,Y);x.fillStyle='#fff';x.strokeStyle=NAVY;x.lineWidth=2;x.shadowColor='rgba(0,0,0,.15)';x.shadowBlur=10;rr(-110,-24,220,48,24);x.fill();x.shadowBlur=0;x.stroke();txt(s,0,1,{f:IN,w:800,size:15,ls:3,c:NAVY});x.restore();});
+  const ap=eo(P(t,147.9,.3));if(ap>0){x.strokeStyle=NAVY;x.lineWidth=4;x.beginPath();x.moveTo(760,350);x.lineTo(760+40*ap,350);x.stroke();}
+  clipCard('gta6',t,148.1,1000,350,380,214,3,1,'GTA VI · 2026');navy('THE FOUNDATION OF GTA VI',W/2,95,46,P(t,148.3,.3));}
+// ===== END F — to be continued (149.6-152)
+function LEND(t){dim(lerp(.2,.6,P(t,149.7,1)));txt('TO BE CONTINUED',W/2,H/2,{size:54,gold:1,ls:8,reveal:P(t,149.8,.5)});x.fillStyle=`rgba(0,0,0,${P(t,151.3,.7)})`;x.fillRect(0,0,W,H);}
+
+const S=[[0,2.8,L1,'G',.04],[2.8,5.48,L2,'W',.02],[5.48,7.2,L3,'P',.02],[7.2,10.78,L4,'G',0],[10.78,15.3,L5,'W',.02],[15.3,17.1,L6,'G',0],[17.1,21.55,L7,'P',.02],[21.55,26.25,L8,'G',.02],[26.25,28.5,L9,'W',.02],[28.5,34.2,L10,'G',.02],
+ [34.2,37.75,L11,'P',.02],[37.75,39.3,L12,'G',.03],[39.3,45.1,L13,'W',.02],[45.1,51.95,L14,'G',.02],[51.95,55.15,L15,'G',.03],[55.15,58.45,L16,'F',0],[58.45,61.25,L17,'F',0],[61.25,64.65,L18,'W',.02],[64.65,67.15,L19,'G',.03],[67.15,73.05,L20,'P',.02],
+ [73.05,78.2,L21,'P',.02],[78.2,80.8,L22,'G',.03],[80.8,87.45,L23,'W',.02],[87.45,92.25,L24,'G',.02],[92.25,96.35,L25,'P',.02],[96.35,98.7,L26,'F',.02],[98.7,102.85,L27,'W',.02],[102.85,108.15,L28,'G',0],[108.15,109.85,L29,'F',.03],[109.85,113.7,L30,'W',.02],
+ [113.7,116.9,L31,'G',.02],[116.9,119.8,L32,'P',.02],[119.8,121.6,L33,'G',0],[121.6,125.55,L34,'W',.02],[125.55,129.35,L35,'P',.02],[129.35,133.05,L36,'G',0],[133.05,134.85,L37,'F',.03],[134.85,142.1,L38,'G',0],[142.1,144.65,L39,'P',.02],[144.65,149.6,L40,'W',.02],[149.6,152,LEND,'F',0]];
+function kindAt(t){for(const [a,b,,k] of S)if(t>=a&&t<b)return k;return 'F';}
+function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.clearRect(0,0,W,H);
+  for(const [a,b,f,k,pu] of S){if(t<a-.02||t>b+.02)continue;x.save();x.globalAlpha=cl((t-a)/.12)*(1-cl((t-(b-.12))/.12));cam(1+pu*cl((t-a)/(b-a)));f(t);x.restore();x.restore();}
+  const k=kindAt(t);if(k==='G'||k==='F'){particles(t,36,GOLD,.55);vignette(.5);if(t<51.95)progress(cl(t/51.95));else{progress(cl((t-51.95)/(149.6-51.95)));chapterTag(1,'THE 2013 PHENOMENON',P(t,52.1,.3));}}
+  if(t>2.38&&t<2.8){x.fillStyle=`rgba(255,240,200,${.4*(1-P(t,2.38,.4))})`;x.fillRect(0,0,W,H);}
+  for(const [a] of S)if(t>=a&&t<a+.06&&a>0){x.fillStyle='rgba(255,255,255,.18)';x.fillRect(0,0,W,H);}}
+async function ready(){await loadFonts();for(const n of ['gen1','gen2','gen3','guin','online','v5','v6','rdr','gta6','mc','trailer','boat','club','beach','launchc','jet','flam','heli'])await loadSeq(n,"../cards/"+n,89);render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>

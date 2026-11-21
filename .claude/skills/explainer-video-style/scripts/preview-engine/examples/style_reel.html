@@ -9,7 +9,7 @@ function look(s,t,t0,t1){if(t<t0||t>t1)return;const a=P(t,t0+.3,.3)*(1-P(t,t1-.4
   x.fillStyle='rgba(0,0,0,.55)';rr(W-w-24,20,w,26,13);x.fill();txt(s,W-w/2-24,34,{f:IN,w:700,size:11,ls:3,c:'#fff'});x.restore();}
 
 // ---- intro 0-3
-function sIntro(t){txt('ZEMTV',W/2,250,{f:IN,w:700,size:14,ls:8,c:'#3fd474',a:P(t,.2,.3)});txt('STYLE REEL',W/2,320,{size:110,gold:1,ls:6,reveal:P(t,.4,.6)});
+function sIntro(t){txt('PREVIEW',W/2,250,{f:IN,w:700,size:14,ls:8,c:'#3fd474',a:P(t,.2,.3)});txt('STYLE REEL',W/2,320,{size:110,gold:1,ls:6,reveal:P(t,.4,.6)});
   txt('EVERY LOOK · REAL FOOTAGE · MEASURED MOTION',W/2,410,{f:IN,w:600,size:14,ls:5,c:'#9a9a9a',a:P(t,1.1,.3)});}
 // ---- A1 gold over gameplay 3-12
 function sA1(t){kb(IMG['g1:bed'],t,3,9,1.12,1.22,.7,.7);vignette(.6);

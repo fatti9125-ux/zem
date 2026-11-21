@@ -1,6 +1,6 @@
 # Look B: White-evidence documentary
 
-Source: "Noah's Ark / Durupınar formation" documentary (32 clips, 640×360 @24fps). It uses the same ZemTV green-Z ident at about 1:10.
+Source: "Noah's Ark / Durupınar formation" documentary (32 clips, 640×360 @24fps). It uses a channel logo sting at about 1:10 (that channel's brand: never reuse it).
 
 ## Two alternating worlds
 1. **Full-bleed footage.** Drone aerials, field crews, labs, archival photos, AI-generated historical recreations (photoreal, desaturated warm/teal grade). This is about 60% of the runtime. Each shot runs 2–5 s and *always* moves: a drone push, or a slow 3–8% Ken-Burns zoom or pan.
@@ -65,7 +65,7 @@ Cut or dissolve between the worlds. The white stage is where explanation happens
 19. **Cutaway illustrations** (27): a drill auger animating through soil strata, with a debris burst at each layer.
 
 ## Ident and ending
-- Green rounded-square "Z" with a white letter, on a dark textured background, at about 1:10 (2–3 s).
+- A 2–3 s channel logo sting at about 1:10. Only use the user's own logo, if they have one.
 - The ending is a calm drone pull-back over the site with a dissolve to black. No heavy graphics.
 
 ## Pacing notes

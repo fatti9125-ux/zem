@@ -5,7 +5,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.." && mkdir -p arch && cd arch
 FFPROXY=${FFPROXY:-}
-UA="ZemTVFootageFinder/1.1 (educational documentary research)"
+UA="ExplainerFootageFinder/1.1 (educational documentary research)"
 get(){ curl -sSfL -A "$UA" -o "$1" "$2"; sleep 3; }
 get c1_nyse.jpg     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Crowd_outside_nyse.jpg/1280px-Crowd_outside_nyse.jpg" || echo "fetch c1_nyse via find_footage.py 'Crowd outside nyse'"
 get c1_mother.jpg   "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Lange-MigrantMother02.jpg/1280px-Lange-MigrantMother02.jpg" || echo "fetch via find_footage.py 'Lange MigrantMother02'"
