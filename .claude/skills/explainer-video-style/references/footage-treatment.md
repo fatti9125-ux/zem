@@ -41,7 +41,7 @@ Add a vignette to every footage shot: 0.45–0.6 in look A, 0.5 in look B.
 - **Names:** huge white condensed caps (40–60% of the frame width), on two lines, placed in the empty side of the frame with a soft shadow ("THE / EXPERT").
 - **Questions:** bottom-centre white caps with a shadow, about 34 px ("COINCIDENCE OR SOMETHING ELSE?").
 - **Location:** lower-third with a yellow bar ("|EASTERN TURKEY · AERIAL").
-- **Chapter tag (look A):** top-left gold "PART 1" pill + white caps title ("PART 1 · THE BUDGET"), visible for the whole chapter, under the top progress line.
+- **Chapter tag (look A):** top-left gold "PART 1" pill + white caps title ("PART 1 · THE BUDGET"), visible for the whole chapter, under the top progress line. **Seen in the reference only. Don\'t use it in the user\'s videos: they asked for no corner labels.**
 
 ## 6. Sourcing
 - **Look A:** gameplay captures (cinematic camera, no HUD), trailer shots, stock of crowds, offices, stock tickers and servers.

@@ -61,7 +61,7 @@ Use `scripts/find_footage.py`. Follow `references/footage-sourcing.md` for:
 The essentials:
 - A Reddit post is never a licence: trace it to the original archive.
 - Use only PD / CC0 / CC-BY / free-stock material without flagging it. List anything else as "licence needed".
-- Record every asset in `CREDITS.txt` and end with a sources card.
+- Record every asset in `CREDITS.txt` and hand it over for the video description (no on-screen sources card).
 
 If a platform is blocked or needs a key (Reddit's API needs a token for `oauth.reddit.com`), say which one and carry on with the rest.
 
@@ -110,7 +110,7 @@ Game trailers and other publishers' clips can trigger Content ID claims or strik
 3. **Never use the source audio** (trailer music, dialogue). Use only the user's narration, the synthesized bed (`music_bed.py`) and SFX.
 4. **Transform every shot**: graphics, dim, crop, cards, or a white/paper scene on top. Never run a raw trailer stretch.
 5. **Mix sources**, and prefer the user's own captures or **CC-BY gameplay** (credit it).
-6. End with a sources card: "Footage: … (short excerpts for commentary) · … CC BY 4.0 · Not affiliated with …".
+6. Put the sources in the **YouTube description**, not on screen: "Footage: … (short excerpts for commentary) · … CC BY 4.0 · Not affiliated with …". Hand the user a `CREDITS.txt` ready to paste.
 7. Tell the user honestly that this lowers the risk but can't guarantee no claim. Their own recorded gameplay is the safest.
 
 ## Sync with the voice-over (non-negotiable)
@@ -145,7 +145,7 @@ Practical consequences:
 2. **Big claim + tiny caveat.** Every number or claim gets a small grey or red qualifier line (`UNCONFIRMED · ESTIMATE ONLY`, `NOT GTA VI'S REAL BUDGET`).
 3. **Labels attach to things.** Use leader lines, lower-third bars (`|LABEL`), tags or dimension lines. Floating text only for headlines.
 4. **Background footage is texture** behind graphics: darken it 40–60%, blur, or desaturate, and vignette it. Every still gets a Ken Burns move (1.00 → 1.06–1.08). Exact grades are in `references/footage-treatment.md`.
-8. **Chapter tag (look A):** a gold "PART n" pill + a white caps title at the top-left for the whole chapter, under a 2–3 px progress line on the top edge.
+8. **No persistent on-screen labels.** Don't show a "PART n · TITLE" chapter tag, series name, channel name or video title in the corner: the user uploads to their own channel and asked for none. A 2–3 px progress line on the top edge is fine.
 5. **One typeface family.** Use a heavy condensed sans in all caps (Oswald / Bebas Neue / Anton / League Gothic). Add a serif italic only for collage highlights.
 6. **Entrances ease out (4–8 frames); impact items overshoot.** Impact items are stamps, pops and the hero number. Exits are faster than entrances, or simply dissolve.
 7. **Ask a question before showing the answer.** Every chapter title is a question.

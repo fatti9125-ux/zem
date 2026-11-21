@@ -39,7 +39,7 @@
 4. Sample a long film before choosing shots: grab one frame every 2 minutes, tile them into a contact sheet, and pick the strongest shots.
 5. Turn clips into frame sequences for the preview engine (`fps=30, scale=960, -q:v 4 seq/name/%03d.jpg`) and play them with `loadSeq` + `seqFrame` (see `scripts/preview-engine/README.md`).
 6. Cut-outs (presenters, objects): `scripts/cutout.py in.png out.png`, which uses rembg `isnet-general-use` and keeps the largest region. Pick a frame where the subject is separated from the crowd.
-7. Put every asset in `CREDITS.txt` (file, licence, author, page URL), and give the video a sources card or description block.
+7. Put every asset in `CREDITS.txt` (file, licence, author, page URL), and give the user a description block (no on-screen sources card).
 
 ## 4. Licence rules (non-negotiable)
 - Use only **public domain, CC0, CC-BY / CC-BY-SA (with attribution), or free-stock-licensed** material without asking. Anything else goes in the asset list as "licence needed".
