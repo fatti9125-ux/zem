@@ -214,6 +214,18 @@ Give tool-specific notes only for the tool the user uses.
 - **Blender** for look-A 3D: gold metallic material, an emission strip light, a low-poly scene, and a camera dolly of 5–10% over the shot.
 - **ffmpeg** only for assembly or rough cuts, not for motion design.
 
+## Hand-off package (always)
+
+The user downloads everything and may need to prove the edit to YouTube. For every finished video, save a project folder in the workspace at `projects/<video>/` and send the files:
+- `FINAL_VIDEO.mp4`
+- the layers on their own: footage track, graphics layer with alpha (ProRes 4444 `.mov` + small VP9-alpha `.webm`), tightened VO, music bed, SFX, final mix
+- `timeline_premiere_resolve.xml` (FCP7 XML: V1 footage, V2 graphics, A1–A3 audio)
+- `cut_list.csv` (every excerpt: source, in-point, length) and `scene_list.csv` (style per line)
+- `EDITING_BREAKDOWN.mp4`: footage | graphics on checkerboard | final | VO waveform with the live cut/source/scene info
+- `CREDITS.txt` for the description, and a README
+
+Commit the small source files (scene code, EDLs, transcript, credits). Keep the large media in the git-ignored `exports/` folder. Example script: `projects/gta6_part3/source/export_project.py`.
+
 ## 8. Before handing over, check
 
 - [ ] Every VO sentence that contains a fact has a visual change on screen.
