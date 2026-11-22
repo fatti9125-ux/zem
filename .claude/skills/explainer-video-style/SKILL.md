@@ -115,6 +115,8 @@ Game trailers and other publishers' clips can trigger Content ID claims or strik
 
 ## Sync with the voice-over (non-negotiable)
 
+**Anchor every text element to the word it names.** Use `A(sentence, 'word')` from word timestamps rather than a hand-typed time, so a title, number or chip lands on the frame its word is spoken. See `scripts/word_sync/`. When the user sends only a script, build a sentence-by-sentence TTS placeholder VO at the speed they ask for, and offer to re-sync when they send their own voice.
+
 1. Tighten the VO first (`scripts/tighten_vo.py`). Then **transcribe the tightened audio itself** with word timestamps, in 40–50 s windows (Whisper can drop whole windows; re-run any gap on its own). Don't time against the untightened VO.
 2. Every scene starts on the first word of its line (or ≤ 0.1 s before). Every number, stamp, card or highlight lands on the frame its key word is spoken.
 3. Cuts in the footage EDL use the same line boundaries.
