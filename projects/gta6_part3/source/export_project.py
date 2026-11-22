@@ -4,6 +4,7 @@ Premiere / DaVinci Resolve / Final Cut), and an editing-breakdown video that sho
 Usage: python3 export_project.py <A|B>"""
 import json, os, subprocess, sys, csv, re
 PART = sys.argv[1]
+EXT = json.load(open(sys.argv[2])) if len(sys.argv) > 2 else None
 S = "/tmp/claude-0/-home-user-zem/54129ae5-772d-5b8a-b13b-434b17456a25/scratchpad/"
 R = "/home/user/zem/projects/gta6_part3/"
 cfg = dict(A=dict(edl=S+"p3/edl3.json", foot=S+"p3/footage3.mp4", ov=S+"preview/ov3", mix=S+"preview/mix_p3.wav",
@@ -11,7 +12,8 @@ cfg = dict(A=dict(edl=S+"p3/edl3.json", foot=S+"p3/footage3.mp4", ov=S+"preview/
                   scenes=R+"source/p3_list.js", final=S+"GTA6_Part3_A_ViceCity_vs_Miami.mp4"),
            B=dict(edl=S+"p3/edl3b.json", foot=S+"p3/footage3b.mp4", ov=S+"preview/ovb", mix=S+"preview/mix_p3b.wav",
                   beat=S+"preview/beat_p3b.wav", sfx=S+"preview/sfx_p3b.wav", vo=(329.6, 592.93), dur=264.6, off=329.6,
-                  scenes=R+"source/p3b_list.js", final=S+"GTA6_Part3_B_FloridaMan_to_End.mp4"))[PART]
+                  scenes=R+"source/p3b_list.js", final=S+"GTA6_Part3_B_FloridaMan_to_End.mp4")).get(PART)
+if EXT: cfg = EXT["cfg"]; R = EXT["root"]; NAMES_EXTRA = EXT.get("names", {})
 O = R + f"exports/{PART}/"; os.makedirs(O, exist_ok=True)
 NAMES = {"t1": "GTA VI Trailer 1 (Rockstar Games)", "t2": "GTA VI Trailer 2 (Rockstar Games)", "launch": "GTA VI Launch Trailer (Rockstar Games)"}
 def nm(s): return NAMES.get(s, f"Mixkit stock clip #{s[1:]}" if s and s.startswith("m") else str(s))
@@ -25,7 +27,7 @@ run("ffmpeg", "-v", "error", "-y", "-framerate", "30", "-i", cfg["ov"] + "/%05d.
 run("ffmpeg", "-v", "error", "-y", "-framerate", "30", "-i", cfg["ov"] + "/%05d.png", "-c:v", "prores_ks", "-profile:v", "4444",
     "-pix_fmt", "yuva444p10le", "-qscale:v", "28", "-vendor", "apl0", O + "2_graphics_layer_ALPHA_prores4444.mov")
 a, b = cfg["vo"]
-run("ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(b - a), "-i", S + "p3/vo3_tight.wav", "-ac", "1", O + "3_voiceover_tight.wav")
+run("ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(b - a), "-i", cfg.get("vo_src", S + "p3/vo3_tight.wav"), "-ac", "1", O + "3_voiceover_tight.wav")
 run("cp", cfg["beat"], O + "4_music_bed.wav"); run("cp", cfg["sfx"], O + "5_sfx.wav"); run("cp", cfg["mix"], O + "6_final_mix.wav")
 run("cp", cfg["final"], O + "FINAL_VIDEO.mp4")
 
@@ -57,7 +59,7 @@ def clip(cid, name, fn, kind, n=D, alpha=False):
             f'<start>0</start><end>{n}</end><in>0</in><out>{n}</out><file id="file-{cid}"><name>{fn}</name><pathurl>{fn}</pathurl>'
             f'<rate><timebase>30</timebase><ntsc>FALSE</ntsc></rate><duration>{n}</duration><media>{media}</media></file>'
             + ('<compositemode>normal</compositemode>' if alpha else '') + '</clipitem>')
-xml = ('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE xmeml><xmeml version="4"><sequence><name>GTA6 Part3 ' + PART + '</name>'
+xml = ('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE xmeml><xmeml version="4"><sequence><name>' + cfg.get('title', 'GTA6 Part3 ' + PART) + '</name>'
        f'<duration>{D}</duration><rate><timebase>30</timebase><ntsc>FALSE</ntsc></rate><media><video><format><samplecharacteristics><width>1280</width><height>720</height></samplecharacteristics></format>'
        f'<track>{clip("v1", "Footage layer", "1_footage_layer.mp4", "video")}</track>'
        f'<track>{clip("v2", "Graphics layer (alpha)", "2_graphics_layer_ALPHA_prores4444.mov", "video", alpha=True)}</track></video><audio>'
