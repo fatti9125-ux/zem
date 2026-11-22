@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:A;src:url(anton/files/anton-latin-400-normal.woff2)}
+@font-face{font-family:Pc;src:url(pacifico/files/pacifico-latin-400-normal.woff2)}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+svg{display:block}
+.t{font-family:A;paint-order:stroke;stroke:#111;stroke-linejoin:round}
+</style></head><body>
+<svg width="1080" height="1920" viewBox="0 0 1080 1920">
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0638"/><stop offset=".35" stop-color="#6b0f6e"/><stop offset=".6" stop-color="#ff2f8f"/><stop offset=".78" stop-color="#ff8a3d"/><stop offset="1" stop-color="#ffd25c"/></linearGradient>
+ <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a0"/><stop offset=".6" stop-color="#ffb347"/><stop offset="1" stop-color="#ff3d7f"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6b8"/><stop offset=".5" stop-color="#ffc531"/><stop offset="1" stop-color="#d9800a"/></linearGradient>
+ <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1b5a"/><stop offset="1" stop-color="#0a0a22"/></linearGradient>
+ <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="2.2" fill="#000" opacity=".18"/></pattern>
+ <clipPath id="sunclip"><circle cx="540" cy="1080" r="420"/></clipPath>
+ <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1080" height="1920" fill="url(#sky)"/>
+<rect width="1080" height="1920" fill="url(#dots)"/>
+<!-- retro sun -->
+<g clip-path="url(#sunclip)"><rect x="100" y="640" width="880" height="900" fill="url(#sun)"/>
+ <g fill="#ff2f8f"><rect x="0" y="1150" width="1080" height="14"/><rect x="0" y="1200" width="1080" height="20"/><rect x="0" y="1256" width="1080" height="26"/><rect x="0" y="1318" width="1080" height="34"/><rect x="0" y="1390" width="1080" height="44"/></g></g>
+<!-- sea -->
+<rect x="0" y="1460" width="1080" height="460" fill="url(#sea)"/>
+<g fill="#ff8a3d" opacity=".55"><rect x="380" y="1490" width="320" height="8"/><rect x="420" y="1530" width="240" height="7"/><rect x="450" y="1570" width="180" height="6"/><rect x="480" y="1610" width="120" height="5"/></g>
+<!-- palms -->
+<g fill="#12051f">
+ <path d="M90 1470 C110 1200 140 1000 190 820 L205 824 C160 1000 140 1200 130 1470Z"/>
+ <path d="M195 830 c-120 -40 -210 10 -260 70 c80 -40 170 -50 250 -50z M195 830 c-40 -120 -150 -160 -230 -150 c90 30 170 80 220 160z M195 830 c60 -110 170 -130 250 -100 c-100 10 -180 50 -240 110z M195 830 c120 -20 210 40 240 110 c-70 -50 -160 -80 -240 -100z M195 830 c-10 -90 30 -170 90 -210 c-40 70 -60 140 -80 210z"/>
+ <path d="M990 1470 C975 1250 950 1080 900 930 L915 925 C965 1080 995 1250 1025 1470Z"/>
+ <path d="M905 935 c120 -30 200 20 250 80 c-80 -40 -170 -50 -250 -60z M905 935 c40 -120 150 -150 230 -130 c-90 20 -170 70 -220 140z M905 935 c-60 -110 -170 -120 -250 -90 c100 10 180 50 240 100z M905 935 c-120 -10 -200 50 -230 120 c70 -50 150 -90 230 -110z"/>
+</g>
+<!-- character (original illustration) -->
+<g transform="translate(540 1180)" stroke="#111" stroke-width="10" stroke-linejoin="round">
+ <path d="M-330 380 C-300 180 -170 120 0 120 C170 120 300 180 330 380 Z" fill="#ff6a1a"/>
+ <path d="M-120 125 L0 260 L120 125" fill="none" stroke-width="10"/>
+ <rect x="-62" y="40" width="124" height="110" fill="#e8a982"/>
+ <path d="M-190 -140 C-195 -330 -110 -420 0 -420 C110 -420 195 -330 190 -140 C185 10 110 90 0 90 C-110 90 -185 10 -190 -140Z" fill="#efb48d"/>
+ <path d="M40 -410 C140 -390 195 -300 190 -140 C185 10 110 90 0 90 C70 40 120 -60 110 -200 C100 -300 80 -370 40 -410Z" fill="#c98764" stroke="none" opacity=".7"/>
+ <path d="M-200 -170 C-235 -175 -240 -90 -195 -80Z M200 -170 C235 -175 240 -90 195 -80Z" fill="#e8a982"/>
+ <path d="M-8 -150 L-30 -60 L10 -55" fill="none" stroke-width="7"/>
+ <path d="M-62 120 C-30 140 30 140 62 120" fill="none" stroke="#1f7a4a" stroke-width="6"/><text x="0" y="118" text-anchor="middle" font-family="A" font-size="30" fill="#1f7a4a" stroke="none">HA HA HA</text>
+ <!-- hair -->
+ <path d="M-200 -200 L-240 -330 L-170 -310 L-190 -450 L-100 -380 L-80 -520 L0 -410 L70 -530 L100 -390 L190 -470 L180 -320 L250 -340 L200 -200 C150 -330 -150 -330 -200 -200Z" fill="#a44bff"/>
+ <!-- eyes w/ green tattoo -->
+ <path d="M-150 -170 L-70 -215 L-20 -170 L-70 -120Z" fill="#2fbf71"/><path d="M150 -170 L70 -215 L20 -170 L70 -120Z" fill="#2fbf71"/>
+ <circle cx="-72" cy="-168" r="22" fill="#fff"/><circle cx="72" cy="-168" r="22" fill="#fff"/><circle cx="-68" cy="-168" r="11" fill="#111" stroke="none"/><circle cx="68" cy="-168" r="11" fill="#111" stroke="none"/>
+ <path d="M-140 -265 L-30 -225 M140 -265 L30 -225" fill="none" stroke-width="16"/>
+ <!-- grin + cheek tattoo lines -->
+ <path d="M-120 -30 Q10 70 130 -45 Q20 15 -120 -30Z" fill="#fff"/><path d="M-120 -30 Q10 25 130 -45" fill="none" stroke-width="6"/>
+ <path d="M-160 -60 L-110 -20 M-150 -10 L-110 -20 M160 -60 L110 -20 M150 -10 L110 -20" fill="none" stroke="#1f7a4a" stroke-width="8"/>
+ 
+ <text x="0" y="-275" text-anchor="middle" font-family="A" font-size="46" fill="#1f7a4a" stroke="none">FLORIDA</text>
+</g>
+<!-- flying cash -->
+<g stroke="#0b3d1c" stroke-width="5">
+ <g transform="translate(150 640) rotate(-22)"><rect x="-90" y="-45" width="180" height="90" rx="8" fill="#5fd38a"/><circle r="26" fill="#3aa865"/><text y="16" text-anchor="middle" font-family="A" font-size="44" fill="#0b3d1c" stroke="none">$</text></g>
+ <g transform="translate(930 700) rotate(18)"><rect x="-90" y="-45" width="180" height="90" rx="8" fill="#5fd38a"/><circle r="26" fill="#3aa865"/><text y="16" text-anchor="middle" font-family="A" font-size="44" fill="#0b3d1c" stroke="none">$</text></g>
+ <g transform="translate(110 1100) rotate(12)"><rect x="-80" y="-40" width="160" height="80" rx="8" fill="#5fd38a"/><text y="16" text-anchor="middle" font-family="A" font-size="40" fill="#0b3d1c" stroke="none">$</text></g>
+ <g transform="translate(975 1180) rotate(-15)"><rect x="-80" y="-40" width="160" height="80" rx="8" fill="#5fd38a"/><text y="16" text-anchor="middle" font-family="A" font-size="40" fill="#0b3d1c" stroke="none">$</text></g>
+</g>
+<!-- headline -->
+<text class="t" x="540" y="250" text-anchor="middle" font-size="120" fill="#fff" stroke-width="18">HE WANTED</text>
+<text class="t" x="540" y="470" text-anchor="middle" font-size="230" fill="url(#gold)" stroke-width="22">$10M</text>
+<text class="t" x="540" y="580" text-anchor="middle" font-size="96" fill="#fff" stroke-width="16">FROM ROCKSTAR</text>
+<g transform="translate(540 1690) rotate(-6)"><text x="0" y="0" text-anchor="middle" font-family="Pc" font-size="150" fill="#ff4fd8" stroke="#2a0636" stroke-width="16" paint-order="stroke" filter="url(#glow)">Florida Joker</text></g>
+<g transform="translate(540 1830) rotate(-3)"><rect x="-330" y="-55" width="660" height="100" rx="12" fill="#e0283c" stroke="#111" stroke-width="8"/><text class="t" x="0" y="25" text-anchor="middle" font-size="70" fill="#fff" stroke-width="0">NOW HE'S IN GTA 6?</text></g>
+</svg></body></html>
