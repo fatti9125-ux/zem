@@ -9,7 +9,7 @@ edl.json: {"sources": {"t1": "trailer1.mp4", "gp": "gameplay.mp4"},
 Optional "size": [1080, 1920] for vertical Shorts (sources are cover-cropped to fill the frame, never letterboxed).
 Optional "debar": 0.74 (default for vertical) trims baked-in black cinema bars from trailers first; 0 disables.
 Each cut: [out_start, out_end, source, source_in, opts]. opts: "" | crop (zoom 1.18, hides HUD/minimap/watermarks) |
-rev (reverse - rewind beats) | black | split:<src2>:<in2> (2-up comparison). Frame counts are exact so the track stays on the VO.
+rev (reverse - rewind beats) | ax=0.8 (horizontal crop anchor, combine with commas: "rev,ax=0.8") | black | split:<src2>:<in2> (2-up comparison) | vsplit:<src2>:<in2> (top/bottom 2-up for 9:16). Frame counts are exact so the track stays on the VO.
 Then put the transparent graphics layer on top:  ffmpeg -i out.mp4 -framerate 30 -i ov/%04d.png -i mix.wav
   -filter_complex "[0:v][1:v]overlay" -c:v libx264 -crf 18 -c:a aac final.mp4
 """
@@ -24,13 +24,21 @@ for i, (a, b, src, sin, opt) in enumerate(cfg["cuts"]):
     base = f"fps=30,{DEBAR}scale={WD}:{HT}:force_original_aspect_ratio=increase,crop={WD}:{HT},{GRADE}"
     if opt == "black":
         cmd = ["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", f"color=c=black:s={WD}x{HT}:r=30", "-frames:v", str(n)] + enc + [seg]
+    elif opt.startswith("vsplit"):  # vertical 2-up for 9:16 Shorts: top = src, bottom = src2, each cover-cropped to WD x HT/2
+        _, s2, in2 = opt.split(":"); hh = HT // 2
+        fc = (f"[0:v]fps=30,{DEBAR}scale={WD}:{hh}:force_original_aspect_ratio=increase,crop={WD}:{hh},{GRADE}[t];"
+              f"[1:v]fps=30,{DEBAR}scale={WD}:{hh}:force_original_aspect_ratio=increase,crop={WD}:{hh},{GRADE}[b];[t][b]vstack=2")
+        cmd = ["ffmpeg", "-v", "error", "-y", "-ss", str(sin), "-t", dur, "-i", SRC[src], "-ss", in2, "-t", dur, "-i", SRC[s2], "-filter_complex", fc, "-frames:v", str(n)] + enc + [seg]
     elif opt.startswith("split"):
         _, s2, in2 = opt.split(":")
         fc = f"[0:v]fps=30,scale=-2:720,crop=640:720,{GRADE}[l];[1:v]fps=30,scale=-2:720,crop=640:720,{GRADE}[r];[l][r]hstack=2"
         cmd = ["ffmpeg", "-v", "error", "-y", "-ss", str(sin), "-t", dur, "-i", SRC[src], "-ss", in2, "-t", dur, "-i", SRC[s2], "-filter_complex", fc, "-frames:v", str(n)] + enc + [seg]
     else:
-        vf = base + (f",scale={int(WD*1.18)//2*2}:{int(HT*1.18)//2*2},crop={WD}:{HT}" if "crop" in opt else "") + (",reverse" if "rev" in opt else "")
-        cmd = ["ffmpeg", "-v", "error", "-y", "-ss", str(sin), "-t", dur, "-i", SRC[src], "-vf", vf, "-frames:v", str(n)] + enc + [seg]
+        ax = next((float(o[3:]) for o in opt.split(",") if o.startswith("ax=")), None)  # horizontal anchor 0..1 for the cover crop (keep a subject in a 9:16 frame)
+        b2 = base if ax is None else base.replace(f"crop={WD}:{HT},", f"crop={WD}:{HT}:(iw-{WD})*{ax}:(ih-{HT})/2,")
+        vf = b2 + (f",scale={int(WD*1.18)//2*2}:{int(HT*1.18)//2*2},crop={WD}:{HT}" if "crop" in opt.split(",") else "") + (",reverse" if "rev" in opt.split(",") else "")
+        # reverse needs the exact window, or the first frames come from past the out-point
+        cmd = ["ffmpeg", "-v", "error", "-y", "-ss", str(sin), "-t", (str(n / 30) if "rev" in opt.split(",") else dur), "-i", SRC[src], "-vf", vf, "-frames:v", str(n)] + enc + [seg]
     subprocess.run(cmd, check=True); lst.write(f"file '{os.path.abspath(seg)}'\n")
 lst.close()
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", os.path.join(tmp, "list.txt")] + enc + [out], check=True)

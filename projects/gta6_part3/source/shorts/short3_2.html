@@ -1,0 +1,13 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script src="lib_v.js"></script>
+<script src="shorts3.js"></script>
+<script>
+const S=SH2;
+function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.clearRect(0,0,W,H);
+  for(const [a,b,f] of S){if(t<a-.02||t>b+.02)continue;x.save();x.globalAlpha=cl((t-a)/.1)*(1-cl((t-(b-.1))/.1));f(t);x.restore();}
+  for(const [a] of S)if(t>=a&&t<a+.06&&a>0){x.fillStyle='rgba(255,255,255,.18)';x.fillRect(0,0,W,H);}}
+async function ready(){await loadFonts();const ph={};for(const k of ['colony3','colony7','colony2','seven40','life46','life49','sky20'])ph[k]='ph3/'+k+'.jpg';await loadImages(ph);render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>
