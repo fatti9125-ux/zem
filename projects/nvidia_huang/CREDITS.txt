@@ -1,0 +1,32 @@
+CREDITS — Nvidia / Jensen Huang story
+
+Jensen Huang footage: short excerpts (max 3.3 s each) from his SIGGRAPH 2024 keynote conversation (archive.org item 2024-siggraphkeynote-jensen-huang-part-1), used for news commentary.
+Stock video: Mixkit (mixkit.co), Mixkit Stock Video Free License.
+No photo of Alice Huang is shown; she is represented by a silhouette illustration. Newspaper headlines are paraphrased illustrations.
+
+Photos (Creative Commons, via Openverse/Flickr; cropped and animated):
+"Jensen Huang 20231109" by 總統府, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=148923909)
+"Nvidia CEO Jensen Huang" by pestoverde, BY 2.0 (https://www.flickr.com/photos/30364433@N05/34072594183)
+"Jensen Huang 20231109 (cropped2)" by 總統府, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=153684250)
+"Jensen huang stanford 2026-04-30 029" by Anderseidesvik, BY-SA 4.0 (https://commons.wikimedia.org/w/index.php?curid=195802591)
+"Computex TAIPEI" by Masaru Kamikura, BY 2.0 (https://www.flickr.com/photos/20119192@N00/5791118066)
+"File:Jensen Huang at Computex Taipei 20160531b.jpg" by NVIDIA Taiwan, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=59106865)
+"File:Jensen Huang at Computex Taipei 20160531c.jpg" by NVIDIA Taiwan, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=59106942)
+"2788-2888 San Tomas Expwy" by Coolcaesar, BY-SA 4.0 (https://commons.wikimedia.org/w/index.php?curid=134851731)
+"NVIDIA Sign - Santa Clara - California" by willbuckner, BY 2.0 (https://www.flickr.com/photos/160344139@N02/50591924966)
+"Nvidia HQ" by Kevin McCarthy, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=150379957)
+"Nvdia Endeavor Grand Opening entry" by Daniel J. Prostak; Crocodiletiger~commonswiki Crocodiletiger~commonswiki used courtesy of Daniel Prostak, BY-SA 4.0 (https://commons.wikimedia.org/w/index.php?curid=145326155)
+"Tesla/NVIDIA GPU cluster" by ChrisDag, BY 2.0 (https://www.flickr.com/photos/8558461@N08/3706444821)
+"Tesla NVIDIA GPU cluster (3707257190)" by ChrisDag, BY 2.0 (https://commons.wikimedia.org/w/index.php?curid=37119287)
+"tsmc fab12" by 曾成訓, BY 2.0 (https://www.flickr.com/photos/19359045@N02/7999387860)
+"Taipei 101 Night scene, Taipei City" by Taiwan Scenery Gallery, BY-SA 2.0 (https://www.flickr.com/photos/149723665@N07/31459503895)
+"Free Taipei 101 night image" by None, CC0 1.0 (https://www.rawpixel.com/image/5906532/photo-image-light-public-domain-people)
+"taipei 101 台北101" by sese_87, BY-SA 2.0 (https://www.flickr.com/photos/59820460@N07/18618845979)
+"台北101(Taipei 101,Taiwan)" by digi0712, BY-SA 2.0 (https://www.flickr.com/photos/31813761@N02/3700398994)
+"151201-D-HU462-053" by U.S. Department of Defense Current Photos, PDM 1.0 (https://www.flickr.com/photos/39955793@N07/23422834389)
+"151209-D-HU462-107" by U.S. Department of Defense Current Photos, PDM 1.0 (https://www.flickr.com/photos/39955793@N07/23682327882)
+"Awaiting servers" by bugeaters, BY 2.0 (https://www.flickr.com/photos/45778851@N00/3025911233)
+"DSCF1686" by NeoSpire, BY 2.0 (https://www.flickr.com/photos/39131599@N06/3595638270)
+
+Reporting referenced in the narration: The New York Times, Bloomberg, The Information, Reuters. Allegations are unproven; Megaspeed and China deny them.
+Not affiliated with Nvidia.
