@@ -1,0 +1,44 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}canvas{display:block}</style></head>
+<body><canvas id="c" width="2560" height="1440"></canvas>
+<script src="lib.js"></script>
+<script>const T=x=>x;</script>
+<script src="vox.js"></script>
+<script>
+// FINAL: per-line style choice. Times = tightened VO (vo_tight.wav), taken from word timestamps.
+// Kinds: G graphics over gameplay, F full-bleed footage + minimal type, W white Vox stage + live clip cards, P editorial paper + torn prints.
+
+function stepVal(t,list){let v=null,t0=-1;for(const [ti,s] of list)if(t>=ti){v=s;t0=ti;}return [v,t0];}
+function dim(a){if(a<=0)return;x.fillStyle=`rgba(7,5,10,${a})`;x.fillRect(-60,-60,W+120,H+120);const g=x.createRadialGradient(W*.15,H*1.05,0,W*.15,H*1.05,W*.75);g.addColorStop(0,`rgba(255,63,164,${.18*a})`);g.addColorStop(1,'rgba(255,63,164,0)');x.fillStyle=g;x.fillRect(0,0,W,H);}
+function bar3d(X,base,w,h,c1,c2){if(h<=0)return;x.fillStyle=c2;x.beginPath();x.moveTo(X,base-h);x.lineTo(X+14,base-h-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.fill();
+  x.beginPath();x.moveTo(X+w,base);x.lineTo(X+w+14,base-10);x.lineTo(X+w+14,base-h-10);x.lineTo(X+w,base-h);x.closePath();x.globalAlpha*=.75;x.fill();x.globalAlpha/=.75;const g=x.createLinearGradient(X,0,X+w,0);g.addColorStop(0,c1);g.addColorStop(.5,c2);g.addColorStop(1,c1);x.fillStyle=g;x.fillRect(X,base-h,w,h);}
+function gcard(X,Y,w,h,col=GOLD,fill='rgba(20,12,4,.6)'){x.fillStyle=fill;x.strokeStyle=col;x.lineWidth=1.5;rr(X-w/2,Y-h/2,w,h,10);x.fill();x.stroke();}
+function strike(X1,Y,X2,p,col=RED,w=6){if(p<=0)return;x.strokeStyle=col;x.lineWidth=w;x.lineCap='round';x.beginPath();x.moveTo(X1,Y);x.lineTo(lerp(X1,X2,p),Y);x.stroke();x.lineCap='butt';}
+function head(s,t,t0,y=90,size=44,gold=false){txt(s,W/2,y,{size,w:700,ls:3,...(gold?{gold:1}:{c:'#f0f0f0',sh:14}),reveal:P(t,t0,.4)});}
+function kick(s,t,t0,y=70,col='#444'){txt(s,W/2,y,{f:IN,w:700,size:14,ls:5,c:col,a:P(t,t0,.25)});}
+function icon(kind,col='#f2f2f2'){x.strokeStyle=col;x.lineWidth=5;x.lineJoin='round';
+  if(kind==='movie'){x.strokeRect(-60,-30,120,80);x.beginPath();x.moveTo(-60,-30);x.lineTo(-56,-62);x.lineTo(64,-52);x.lineTo(60,-30);x.stroke();for(let i=0;i<4;i++){x.beginPath();x.moveTo(-40+i*30,-58+i*1.5);x.lineTo(-28+i*30,-31);x.stroke();}}
+  if(kind==='album'){x.beginPath();x.arc(0,0,62,0,7);x.stroke();x.lineWidth=1.5;for(let r=24;r<58;r+=8){x.beginPath();x.arc(0,0,r,0,7);x.stroke();}x.fillStyle=col;x.beginPath();x.arc(0,0,14,0,7);x.fill();}
+  if(kind==='book'){x.strokeRect(-50,-62,100,124);x.beginPath();x.moveTo(-34,-62);x.lineTo(-34,62);x.stroke();x.lineWidth=2;for(let i=0;i<3;i++){x.beginPath();x.moveTo(-18,-30+i*18);x.lineTo(34,-30+i*18);x.stroke();}}}
+function person(s,col){x.save();x.scale(s,s);x.fillStyle=col;x.beginPath();x.arc(0,-110,34,0,7);x.fill();rr(-48,-68,96,130,30);x.fill();x.fillRect(-40,50,30,90);x.fillRect(10,50,30,90);x.restore();}
+function flagPK(){x.fillStyle='#fff';x.fillRect(-120,-80,60,160);x.fillStyle='#01411c';x.fillRect(-60,-80,180,160);x.fillStyle='#fff';x.beginPath();x.arc(30,0,48,0,7);x.fill();x.fillStyle='#01411c';x.beginPath();x.arc(46,-14,42,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();for(let i=0;i<10;i++){const r=i%2?7:17,a=-Math.PI/2+i*Math.PI/5+.6;x.lineTo(62+Math.cos(a)*r,-22+Math.sin(a)*r);}x.closePath();x.fill();}
+function flagIN(){['#FF9933','#ffffff','#138808'].forEach((c,i)=>{x.fillStyle=c;x.fillRect(-120,-80+i*53.4,240,54);});x.strokeStyle='#000080';x.lineWidth=2.5;x.beginPath();x.arc(0,0,22,0,7);x.stroke();for(let i=0;i<24;i++){const a=i*Math.PI/12;x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(a)*22,Math.sin(a)*22);x.lineWidth=1;x.stroke();}}
+function wcard(X,Y,w,h){x.save();x.shadowColor='rgba(0,0,0,.22)';x.shadowBlur=20;x.shadowOffsetY=8;x.fillStyle='#fff';rr(X-w/2,Y-h/2,w,h,12);x.fill();x.restore();}
+function seqStill(name,i=45){return SEQ[name][i];}
+
+</script>
+<script src="p2_scenes.js"></script>
+
+<script src="p3_scenes.js"></script>
+<script>{const _st=CanvasRenderingContext2D.prototype.setTransform;CanvasRenderingContext2D.prototype.setTransform=function(a,b,c,d,e,f){if(this.canvas.id==='c')return _st.call(this,a*2,b*2,c*2,d*2,e*2,f*2);return _st.call(this,a,b,c,d,e,f);};}</script><script src="einw.js"></script><script src="ein_list.js"></script>
+<script>
+let S=[];
+function kindAt(t){for(const [a,b,,k] of S)if(t>=a&&t<b)return k;return 'F';}
+function render(t){x.setTransform(1,0,0,1,0,0);x.globalAlpha=1;x.globalCompositeOperation='source-over';x.clearRect(0,0,W,H);
+  for(const [a,b,f,k,pu] of S){if(t<a-.02||t>b+.02)continue;x.save();x.globalAlpha=cl((t-a)/.12)*(1-cl((t-(b-.12))/.12));cam(1+pu*cl((t-a)/(b-a)));f(t);x.restore();x.restore();}
+  const k=kindAt(t);if(k==='G'||k==='F'){particles(t,30,GOLD,.45);vignette(.5);if(t<END-2)progress(cl(t/(END-2)));}
+  for(const [a] of S)if(t>=a&&t<a+.06&&a>0){x.fillStyle='rgba(255,255,255,.16)';x.fillRect(0,0,W,H);}}
+async function ready(){S=SN.map((s,i)=>[s[0],i<SN.length-1?SN[i+1][0]:END,s[3],(s[1]==='F'||s[1]==='G')?s[1]:'W',(s[1]==='F'||s[1]==='G')?.04:.02]);await loadFonts();const ph={};for(const k of EPH)ph[k]='einph/'+k+'.jpg';await loadImages(ph);render(0);return true;}
+window.ready=ready;window.render=render;
+</script></body></html>
