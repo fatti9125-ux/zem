@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face{font-family:A;src:url(anton.woff2)}html,body{margin:0;background:#000}canvas{display:block}</style></head><body><canvas id="c" width="2560" height="1440"></canvas><script>
+const c=document.getElementById('c'),x=c.getContext('2d');x.scale(2,2);const W=1280,H=720;
+function rr(X,Y,w,h,r){x.beginPath();x.roundRect(X,Y,w,h,r);}
+function womanFig(X,Y,s){x.save();x.translate(X,Y);x.scale(s,s);x.lineJoin='round';x.strokeStyle='#17120f';x.lineWidth=3;
+  x.fillStyle='#231512';x.beginPath();x.moveTo(-46,-78);x.quadraticCurveTo(-52,-128,0,-124);x.quadraticCurveTo(52,-128,46,-78);x.quadraticCurveTo(64,10,54,74);x.lineTo(-54,74);x.quadraticCurveTo(-64,10,-46,-78);x.closePath();x.fill();x.stroke();
+  x.fillStyle='#7a1f3d';x.beginPath();x.moveTo(-82,200);x.quadraticCurveTo(-86,30,-30,2);x.lineTo(30,2);x.quadraticCurveTo(86,30,82,200);x.closePath();x.fill();x.stroke();
+  x.fillStyle='#ecc9ad';x.beginPath();x.moveTo(-24,4);x.quadraticCurveTo(0,34,24,4);x.lineTo(12,-26);x.lineTo(-12,-26);x.closePath();x.fill();x.beginPath();x.ellipse(0,-64,31,40,0,0,7);x.fill();x.stroke();
+  x.fillStyle='#231512';x.beginPath();x.moveTo(-32,-70);x.quadraticCurveTo(-30,-108,4,-104);x.quadraticCurveTo(34,-102,32,-66);x.quadraticCurveTo(12,-92,-32,-70);x.closePath();x.fill();x.restore();}
+
+function T(s,X,Y,size,fill,stroke,sw,rot=0,al='center'){x.save();x.translate(X,Y);x.rotate(rot);x.font=size+'px A';x.textAlign=al;x.textBaseline='middle';x.lineJoin='round';x.strokeStyle=stroke;x.lineWidth=sw;x.strokeText(s,0,0);x.fillStyle=fill;x.fillText(s,0,0);x.restore();}
+function load(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=src;});}
+(async()=>{await document.fonts.load('100px A');const bg=await load('bg.jpg'),jh=await load('jh06.png'),al=await load('alice.jpg');
+ // background: blurred Taipei night, green left / red right
+ x.filter='blur(6px) brightness(.45) saturate(1.3)';const k=Math.max(W/bg.width,H/bg.height)*1.1;x.drawImage(bg,(W-bg.width*k)/2,(H-bg.height*k)/2,bg.width*k,bg.height*k);x.filter='none';
+ let g=x.createRadialGradient(330,420,40,330,420,520);g.addColorStop(0,'rgba(118,185,0,.55)');g.addColorStop(1,'rgba(118,185,0,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ g=x.createRadialGradient(1010,380,40,1010,380,520);g.addColorStop(0,'rgba(220,20,40,.55)');g.addColorStop(1,'rgba(220,20,40,0)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,0,0,.35)');g.addColorStop(.6,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.7)');x.fillStyle=g;x.fillRect(0,0,W,H);
+ // woman sketch polaroid (right)
+ x.save();x.translate(1010,400);x.rotate(.06);x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=30;x.fillStyle='#f5f2ea';x.fillRect(-190,-230,380,500);x.shadowBlur=0;
+ x.save();x.beginPath();x.rect(-170,-210,340,410);x.clip();const k2=Math.max(340/al.width,410/al.height);x.drawImage(al,-al.width*k2/2,-210-10,al.width*k2,al.height*k2);x.restore();
+ x.font='22px A';x.fillStyle='#222';x.textAlign='center';x.fillText('ALICE HUANG',0,240);x.fillStyle='#c8202b';x.beginPath();x.arc(0,-222,12,0,7);x.fill();x.restore();
+ T('?',1150,200,190,'#ff2a3d','#111',14,.15);
+ // red string
+ x.strokeStyle='#e0202f';x.lineWidth=6;x.shadowColor='#e0202f';x.shadowBlur=12;x.beginPath();x.moveTo(560,330);x.quadraticCurveTo(700,300,830,220);x.stroke();x.shadowBlur=0;
+ // Jensen cutout (left, big)
+ const h=820,w=jh.width*h/jh.height;x.shadowColor='rgba(0,0,0,.8)';x.shadowBlur=40;x.drawImage(jh,-40,-20,w,h);x.shadowBlur=0;
+ // text
+ T('HONEY TRAP?',700,600,170,'#ffd400','#111',26,-.03);
+ x.save();x.translate(330,62);x.rotate(-.03);x.fillStyle='#e0202f';rr(-240,-36,480,72,10);x.fill();x.restore();T('NVIDIA CEO RESIGNED',330,64,48,'#fff','#e0202f',0,-.03);
+ x.save();x.translate(1010,690);x.fillStyle='rgba(0,0,0,.75)';rr(-150,-18,300,36,8);x.fill();x.restore();T('ALLEGED · PHOTO: CTI / AFP',1010,690,20,'#ddd','#000',0);
+ document.title='ready';})();
+</script></body></html>
